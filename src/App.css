@@ -1,0 +1,43 @@
+.sidebar {
+  height:100%;
+  width: 20%;
+  background-color: #2E3D50;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.sidebar form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.sidebar form input {
+  text-indent: 10px;
+}
+
+.sidebar form input, .sidebar form button {
+  width: 80%;
+  height: 2rem;
+  margin-bottom: 1rem;
+}
+
+.sidebar form button {
+  width: 82%;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.sidebar form button:hover {
+  color: lightgray;
+}
+
+.logout-btn {
+  position: absolute;
+  bottom: 2rem;
+}

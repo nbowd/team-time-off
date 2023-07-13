@@ -21,6 +21,15 @@ module.exports = {
   files: ['*.ts', '*.tsx'],
   rules: {
     'react/react-in-jsx-scope': 0,
-
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "js": "never",
+        "jsx": "never",
+        "ts": "never",
+        "tsx": "never"
+      }
+    ]
   },
 };
