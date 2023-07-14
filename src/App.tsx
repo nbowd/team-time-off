@@ -1,27 +1,32 @@
-import { useContext, useRef } from "react";
+import { useContext } from "react";
 import { AuthContext } from "@/context/AuthContext";
-import { auth } from "@/firebaseSetup";
 import '@/App.css'
 import LoginOrSignup from "./components/LoginOrSignup";
+import Profile from "./components/Profile";
+import { Route, Routes } from 'react-router-dom';
+
 
 function App() {
 
 
   const user = useContext(AuthContext);
 
-  const signOut = async () => {
-    await auth.signOut();
-  }
   return (
     <div className="app">
       <div className="sidebar">
         {user? 
-          <>
-          <h1>logged in</h1>
-          <button className="logout-btn" onClick={signOut}>Log out</button>
-          </>: 
+          <Profile user={user} />
+          : 
           <LoginOrSignup/>}
       </div>
+      
+      <Routes>
+        <Route path="/" element={<h1>Root</h1>} />
+        <Route path="/requests" element={<h1>All Requests</h1>} />
+        <Route path="/requests/:id" element={<h1>My Requests</h1>} />
+        <Route path="/users" element={<h1>Users</h1>} />
+      </Routes>
+      
     </div>
   );
 }
