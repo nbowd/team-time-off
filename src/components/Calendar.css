@@ -1,0 +1,109 @@
+.calendar {
+  display:flex;
+  flex-direction: column;
+  width: 100%;
+  height:100vh;
+}
+
+.years {
+  background-color: #00824B;
+  color: #BEBEBE;
+}
+
+.current-year, .current-month {
+  color: white;
+  border-bottom: 1px solid white;
+}
+
+.months {
+  background-color: #00A35E;
+}
+
+.years, .months {
+  color: #BEBEBE;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 2.5rem
+}
+
+.years span, .months span {
+  margin: 0 .5rem;
+  cursor: pointer;
+}
+
+.years span:hover, .months span:hover {
+  border-bottom: 1px solid white;
+}
+
+.days-header {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.days-header span {
+  padding-left: .5rem;
+  padding-top: .25rem;
+  font-size: 20px;
+  font-weight: bolder;
+}
+
+.days-header span:first-child, .days-header span:last-child {
+  background-color: #D9D9D9;
+}
+.calendar-body {
+  flex: 1;
+  overflow: auto;
+}
+.calendar-body, .days {
+  width: 100%;
+  height:100%;
+}
+.days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.days .date:nth-child(7n+1), .days .date:nth-child(7n) {
+  background-color: #D9D9D9;
+}
+
+.date {
+  border-bottom: 1px solid black;
+}
+
+.date time {
+  font-size: 1.2rem;
+  margin-top: 1rem;
+  padding-left: .5rem;
+}
+
+.preview-date {
+  color: #868686;
+}
+
+.col-2{
+  grid-column-start: 2;
+}
+
+.col-3{
+  grid-column-start: 3;
+}
+
+.col-4{
+  grid-column-start: 4;
+}
+
+.col-5{
+  grid-column-start: 5;
+}
+
+.col-6{
+  grid-column-start: 6;
+}
+
+.col-7{
+  grid-column-start: 7;
+}
+
