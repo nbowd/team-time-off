@@ -8,41 +8,21 @@ import clipboardIcon from '@/assets/icons/icons8-clipboard-32.png';
 import listIcon from '@/assets/icons/icons8-list-50.png';
 import usersIcon from '@/assets/icons/icons8-users-32.png';
 import logoutIcon from '@/assets/icons/icons8-logout-64.png';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import firebase from "firebase/compat/app"; // used for interface types;
 import { Link, useLocation  } from "react-router-dom";
-
-
+import Modal from './Modal';
+import { Employee } from '@/types';
 
 interface ProfileProps {
   user: firebase.User | null
 }
 
-interface Employee {
-  id: string,
-  first_name: string,
-  last_name: string,
-  email: string,
-  manager_privileges: boolean,
-  profile_picture: string,
-  remaining_pto: number,
-  used_pto: number,
-  national_holidays: string
-}
-
 function Profile({user}: ProfileProps) {
-  const location = useLocation();  
-  const [profile, setProfile] = useState<Employee>({
-    id: "",
-    first_name: "",
-    last_name: "",
-    email: "",
-    manager_privileges: false,
-    profile_picture: "",
-    remaining_pto: 0,
-    used_pto: 0,
-    national_holidays: ""
-  });
+  const location = useLocation();
+  const [profile, setProfile] = useState<Employee | null>(null);
+
+  const modalRef = useRef<HTMLDialogElement>(null);
 
   const signOut = async () => {
     await auth.signOut();
@@ -56,7 +36,6 @@ function Profile({user}: ProfileProps) {
       }
     });
   }
-  console.log(location)
   useEffect(() => {
     getProfile();
   }, [])
@@ -65,25 +44,27 @@ function Profile({user}: ProfileProps) {
     <div className="profile">
       <div className="profile-info">
         <img className='profile-picture' src={defaultProfile} alt="default profile picture" />
-        <h2>{profile.first_name} {profile.last_name}</h2>
-        <h3>Remaining PTO Days: {profile.remaining_pto}</h3>
-        <h3>Used PTO Days: {profile.used_pto}</h3>
+        <h2>{profile?.first_name} {profile?.last_name}</h2>
+        <h3>Remaining PTO Days: {profile?.remaining_pto}</h3>
+        <h3>Used PTO Days: {profile?.used_pto}</h3>
       </div>
       <div className="navigation">
-        <button className="new-request">
+        <button className="new-request" onClick={() => modalRef.current?.showModal()}>
           <img src={plusIcon} alt="" className="profile-icon" />
           MAKE NEW REQUEST
         </button>
+
+        <Modal modalRef={modalRef} profile={profile} />
         <Link to='/' className={`calendar-nav ${location.pathname === '/'? 'current-nav': ''}`}>
           <img src={calendarIcon} alt="" className="profile-icon" />
           CALENDAR
         </Link>
-        <Link to={`/requests/${profile.id}`} className={`my-requests-nav ${location.pathname.includes('/requests/')? 'current-nav': ''}`}>
+        <Link to={`/requests/${profile?.id}`} className={`my-requests-nav ${location.pathname.includes('/requests/')? 'current-nav': ''}`}>
           <img src={clipboardIcon} alt="" className="profile-icon" />
           MY REQUESTS
         </Link>
         {
-          profile.manager_privileges ?
+          profile?.manager_privileges ?
           <>
             <Link to='/requests' className={`handle-requests-nav ${location.pathname === '/requests'? 'current-nav': ''}`}>
               <img src={listIcon} alt="" className="profile-icon" />
