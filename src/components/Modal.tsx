@@ -3,7 +3,7 @@ import 'react-dropdown/style.css';
 import TextInput from './TextInput';
 import React, { useState, useContext } from 'react'
 import '@/components/Modal.css'
-import { Employee, Request } from "@/types";
+import { Employee } from "@/types";
 import { db } from "@/firebaseSetup";
 import { collection, doc, setDoc } from "firebase/firestore";
 import { AuthContext } from "@/context/AuthContext";

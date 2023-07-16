@@ -39,7 +39,7 @@ function LoginOrSignup() {
       )
       const newUser = response.user;
         
-      const docRef = await addDoc(collection(db, "Employees"), {
+      await addDoc(collection(db, "Employees"), {
         id: newUser!.uid,
         first_name: firstNameRef.current!.value,
         last_name: lastNameRef.current!.value,
