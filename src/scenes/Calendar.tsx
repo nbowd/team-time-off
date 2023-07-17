@@ -1,5 +1,5 @@
-import '@/components/Calendar.css'
-import { add, eachDayOfInterval, endOfMonth, endOfWeek, format, getDay, isSameMonth, parse, startOfMonth, startOfToday, startOfWeek } from 'date-fns';
+import '@/scenes/Calendar.css'
+import { eachDayOfInterval, endOfMonth, endOfWeek, format, getDay, isSameMonth, parse, startOfToday, startOfWeek } from 'date-fns';
 import { useState } from 'react'
 
 function Calendar() {
@@ -14,12 +14,7 @@ function Calendar() {
     end: endOfWeek(endOfMonth(firstDayCurrentMonth)),
     
   });
-  
-  const nextMonth = () => {
-    let firstDayNextMonth = add(firstDayCurrentMonth, { months: 1 })
 
-    setActiveMonth(format(firstDayNextMonth, 'MMM'))
-  }
 
   const getDateColumn = (day: Date, dayIdx: number) => {
     if (dayIdx === 0) {

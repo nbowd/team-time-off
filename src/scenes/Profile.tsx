@@ -1,4 +1,4 @@
-import '@/components/Profile.css'
+import '@/scenes/Profile.css'
 import { auth, db } from "@/firebaseSetup";
 import { collection, getDocs } from "firebase/firestore";
 import defaultProfile from '@/assets/default_profile.jpg';
@@ -11,7 +11,7 @@ import logoutIcon from '@/assets/icons/icons8-logout-64.png';
 import { useEffect, useRef, useState } from 'react';
 import firebase from "firebase/compat/app"; // used for interface types;
 import { Link, useLocation  } from "react-router-dom";
-import Modal from './Modal';
+import Modal from '@/components/Modal';
 import { Employee } from '@/types';
 
 interface ProfileProps {
@@ -54,7 +54,7 @@ function Profile({user}: ProfileProps) {
           MAKE NEW REQUEST
         </button>
 
-        <Modal modalRef={modalRef} profile={profile} />
+        <Modal modalRef={modalRef} profile={profile} type={'create'} />
         <Link to='/' className={`calendar-nav ${location.pathname === '/'? 'current-nav': ''}`}>
           <img src={calendarIcon} alt="" className="profile-icon" />
           CALENDAR

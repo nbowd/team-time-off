@@ -1,9 +1,10 @@
 import { useContext } from "react";
 import { AuthContext } from "@/context/AuthContext";
 import '@/App.css'
-import LoginOrSignup from "./components/LoginOrSignup";
-import Profile from "./components/Profile";
-import Calendar from "./components/Calendar";
+import LoginOrSignup from "@/scenes/LoginOrSignup";
+import Profile from "@/scenes/Profile";
+import Calendar from "@/scenes/Calendar";
+import MyRequests from "./scenes/MyRequests";
 import { Route, Routes } from 'react-router-dom';
 
 
@@ -24,7 +25,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Calendar />} />
         <Route path="/requests" element={<h1>All Requests</h1>} />
-        <Route path="/requests/:id" element={<h1>My Requests</h1>} />
+        <Route path="/requests/:id" element={<MyRequests user={user} />} />
         <Route path="/users" element={<h1>Users</h1>} />
       </Routes>
       

@@ -1,7 +1,7 @@
 import { useState, useRef } from "react"
 import { auth, db } from "@/firebaseSetup";
 import { collection, addDoc } from "firebase/firestore"; 
-import './LoginOrSignup.css';
+import '@/scenes/LoginOrSignup.css';
 
 const TOTAL_PTO = 25;
 
