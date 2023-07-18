@@ -44,7 +44,7 @@ function LoginOrSignup() {
         first_name: firstNameRef.current!.value,
         last_name: lastNameRef.current!.value,
         email: newUser!.email,
-        manager_privileges: true,
+        manager_privileges: false,
         remaining_pto: TOTAL_PTO,
         used_pto: 0,
         profile_picture: null,

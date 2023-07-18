@@ -1,7 +1,7 @@
 import '@/scenes/MyRequests.css'
 import React,{ useState, useEffect, useRef } from 'react'
 import { db } from "@/firebaseSetup";
-import { collection, query, where, getDocs, doc, deleteDoc  } from "firebase/firestore";
+import { collection, query, where, getDocs, doc, deleteDoc, orderBy  } from "firebase/firestore";
 import { Request } from '@/types';
 import firebase from "firebase/compat/app"; // for User props typing
 import editIcon from '@/assets/icons/icons8-pencil-30.png';
@@ -81,7 +81,7 @@ function MyRequests({user}: MyRequestsProps) {
 
   const fetchRequests = async () => {
     const requestsRef = collection(db, "Requests");
-    const q = query(requestsRef, where("employee_id", "==", `${user?.uid}`))
+    const q = query(requestsRef, where("employee_id", "==", `${user?.uid}`), orderBy("start_date", "asc"))
     const querySnapshot = await getDocs(q); 
     let tempArray:Request[] = []
     querySnapshot.forEach((doc) => {

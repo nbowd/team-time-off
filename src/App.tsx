@@ -5,6 +5,7 @@ import LoginOrSignup from "@/scenes/LoginOrSignup";
 import Profile from "@/scenes/Profile";
 import Calendar from "@/scenes/Calendar";
 import MyRequests from "./scenes/MyRequests";
+import HandleRequests from "./scenes/HandleRequests";
 import { Route, Routes } from 'react-router-dom';
 
 
@@ -24,7 +25,7 @@ function App() {
       
       <Routes>
         <Route path="/" element={<Calendar />} />
-        <Route path="/requests" element={<h1>All Requests</h1>} />
+        <Route path="/requests" element={<HandleRequests user={user} />} />
         <Route path="/requests/:id" element={<MyRequests user={user} />} />
         <Route path="/users" element={<h1>Users</h1>} />
       </Routes>

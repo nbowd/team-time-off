@@ -17,5 +17,6 @@ export interface Request {
   type: string,
   start_date: string,
   end_date: string,
-  approver: string
+  approver: string,
+  full_name?: string,
 }

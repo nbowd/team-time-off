@@ -1,4 +1,4 @@
-import Dropdown from "react-dropdown";
+import Dropdown, { Option } from "react-dropdown";
 import 'react-dropdown/style.css';
 import TextInput from './TextInput';
 import React, { useState, useContext, useEffect } from 'react'
@@ -85,11 +85,11 @@ function Modal({modalRef, profile, request, type}: ModalProps) {
       }
     }
 
-    const changeApprover = (option:any) => {
+    const changeApprover = (option: Option) => {
       setApprover(option.value)
     }
 
-    const changeLeaveType = (option:any) => {
+    const changeLeaveType = (option: Option) => {
       setLeaveType(option.value)
     }
 
