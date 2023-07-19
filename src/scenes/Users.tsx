@@ -3,43 +3,18 @@ import { db } from "@/firebaseSetup";
 import { collection, getDocs } from "firebase/firestore";
 import {useState, useEffect} from 'react'
 import { Employee } from '@/types';
+import UserRow from '@/components/UserRow';
 import defaultProfile from '@/assets/default_profile.jpg';
-import triangle from '@/assets/icons/icons8-triangle-30.png'
+import { Doughnut } from 'react-chartjs-2';
+import 'chart.js/auto';
+
+
 
 
 function Users() {
-  const [employees, setEmployees] = useState<Employee[] | []>([]);
-  const [nameRows, setNameRows] = useState<React.ReactNode[] | []>([]);
-
-  const [activeEmployee, setActiveEmployee] = useState<Employee>({
-    id: '',
-    first_name: '',
-    last_name: '',
-    email: '',
-    manager_privileges: false,
-    profile_picture: '',
-    remaining_pto: -1,
-    used_pto: -1,
-    national_holidays: ''
-  });
-
-  const buildNameRows = (users: Employee[]) => {
-    console.log('current users', employees)
-    console.log('current active', activeEmployee)
-    const tempRows = users.map((user: Employee) => {
-      return <div key={user.id} className={activeEmployee.id === user.id? 'user-row user-active': 'user-row'} onClick={() => setActiveEmployee(user)}>
-        <div className='user-profile-info'>
-          <img src={defaultProfile} alt="profile picture" className='user-row-profile-picture' />
-          <div className="user-name-email">
-            <span className='user-name'>{`${user.first_name} ${user.last_name}`}</span>
-            <span className='user-email'>{user.email}</span>
-          </div>
-        </div>
-        <img src={triangle} alt="Triangle for visual highlighting" className='user-row-triangle' />
-      </div>
-    })
-    setNameRows(tempRows)
-  }
+  const [loaded, setLoaded] = useState(false);
+  const [users, setUsers] = useState<Employee[] | []>([]);
+  const [activeUser, setActiveUser] = useState<Employee | null>(null);
 
   const getProfile = async () => {
     const querySnapshot = await getDocs(collection(db, "Employees"));
@@ -47,27 +22,89 @@ function Users() {
     querySnapshot.forEach((doc) => {
         tempArray.push(doc.data() as Employee)
     });
-    setEmployees(tempArray); 
-    setActiveEmployee({...tempArray[0]})
-    buildNameRows(tempArray);
+    setUsers(tempArray); 
+    setActiveUser({...tempArray[0]})
+    setLoaded(true);
   }
-  console.log(employees)
+
+  const formatChartData = (remainingPTO: number, usedPTO: number) => {
+    const data = {
+      labels: ['Remaining PTO', 'Used PTO'],
+      datasets: [
+        {
+          label: '# of Votes',
+          data: [remainingPTO, usedPTO],
+          backgroundColor: [
+            '#00a35f',
+            '#E52020',
+          ],
+          borderColor: [
+            '#00a35f',
+            '#E52020',
+          ],
+          borderWidth: 1,
+        },
+      ],
+    };
+    return data
+  }
 
   useEffect(() => {
     getProfile();
   }, [])
   return (
+    
     <div className="users">
       <div className="users-heading">
         <h1>Users</h1>
       </div>
-      <div className="users-body">
-        <div className="users-body-left">
-          <h3>Name</h3>
-          {nameRows}
+      {loaded?
+        <div className="users-body">
+          <div className="users-body-left">
+            <h3>Name</h3>
+            {users.map((user: Employee)=>(
+              <>
+                <UserRow user={user} active={user.id === activeUser?.id} setUser={setActiveUser}/>
+              </>
+            ))}
+          </div>
+          <div className="users-body-right">
+            <div className='users-body-right-profile'>
+              <img src={defaultProfile} alt="Profile Picture" />
+              <span>{activeUser?.first_name} {activeUser?.last_name}</span>
+              <span>{activeUser?.email}</span>
+            </div>
+            <div className="user-graphs">
+              <Doughnut data={formatChartData(activeUser!.remaining_pto, activeUser!.used_pto)} />
+            </div>
+            <div className="user-details">
+              <h3>Time Off Details for {activeUser?.first_name} {activeUser?.last_name}</h3>
+              <div className="user-detail-row">
+                <div className="user-detail">
+                  <span className="detail-bubble">25</span>
+                  <span className="detail-label">Total PTO</span>
+                </div>
+                <div className="user-detail">
+                  <span className="detail-bubble">{activeUser?.used_pto}</span>
+                  <span className="detail-label">Used PTO</span>
+                </div>
+              </div>
+              <div className="user-detail-row">
+                <div className="user-detail">
+                  <span className="detail-bubble">{activeUser?.remaining_pto}</span>
+                  <span className="detail-label">Remaining PTO</span>
+                </div>
+                <div className="user-detail">
+                  <span className="detail-bubble">{activeUser?.national_holidays}</span>
+                  <span className="detail-label">National Holidays</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div className="users-body-right">right</div>
-      </div>
+        :
+        <h1></h1>
+      }
     </div>
   )
 }

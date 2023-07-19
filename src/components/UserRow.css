@@ -1,0 +1,43 @@
+.user-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: .5rem 0;
+  border-radius: 5px;
+}
+
+.user-profile-info {
+  display: flex;
+  align-items: center;
+  margin-left: 1rem;
+}
+
+.user-name-email {
+  display: flex;
+  flex-direction: column;
+  margin-left: 1rem;
+}
+
+.user-name {
+  font-weight: bold;
+}
+.user-row-profile-picture {
+  width: 4rem;
+  border-radius: 100px;
+  margin: .5rem 0;
+}
+
+.user-row-triangle {
+  height: 1.5rem;
+  margin-right: .5rem;
+}
+
+.hidden {
+  content-visibility: hidden;
+}
+
+.user-active, .user-row:hover {
+  background-color: #00A35E;
+  color: white;
+}
+
