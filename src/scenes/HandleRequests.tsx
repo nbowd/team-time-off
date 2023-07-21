@@ -2,10 +2,10 @@ import '@/scenes/HandleRequests.css'
 import '@/scenes/MyRequests.css'
 import React,{ useState, useEffect } from 'react'
 import { db } from "@/firebaseSetup";
-import { collection, query, getDocs, orderBy, setDoc, doc } from "firebase/firestore";
+import { collection, query, getDocs, orderBy, setDoc, doc  } from "firebase/firestore";
 import { Request, Employee } from '@/types';
 import firebase from "firebase/compat/app"; // for User props typing
-import { differenceInBusinessDays } from 'date-fns';
+import { differenceInBusinessDays, add } from 'date-fns';
 import Dropdown, { Option } from "react-dropdown";
 
 
@@ -21,7 +21,7 @@ function HandleRequests({user}: MyRequestsProps) {
   
   const getBusinessDays = (start: string, end: string) => {
     const startDate = new Date(start);
-    const endDate = new Date(end);
+    const endDate = add(new Date(end), {days: 1})
 
     const totalDays = differenceInBusinessDays(endDate, startDate) + 1;
     return totalDays

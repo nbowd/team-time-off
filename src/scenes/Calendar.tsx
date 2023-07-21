@@ -1,12 +1,36 @@
 import '@/scenes/Calendar.css'
-import { eachDayOfInterval, endOfMonth, endOfWeek, format, getDay, isSameMonth, parse, startOfToday, startOfWeek } from 'date-fns';
-import { useState } from 'react'
+import { isWithinInterval, eachDayOfInterval, endOfMonth, endOfWeek, format, getDay, isSameMonth, parse, startOfToday, startOfWeek, add, isWeekend } from 'date-fns';
+import { useState, useEffect } from 'react'
+import { collection, query, getDocs, orderBy, setDoc, doc } from "firebase/firestore";
+import { db } from "@/firebaseSetup";
+import { Employee, Request } from '@/types';
+
+interface colorsType {
+  [key: string]: string;
+}
+const typeColors: colorsType = {
+  'Parental Leave': 'parental-leave',
+  'Flex Leave': 'flex-leave',
+  'Sick Leave': 'sick-leave'
+}
+
+const nameColors = [
+  '#9F0000',
+  '#830091',
+  '#166700',
+  '#00219A',
+  '#005B98',
+  '#AE0046',
+  '#00644E',
+]
 
 function Calendar() {
   let today = startOfToday();
 
+  const [loaded, setLoaded] = useState(false);
   const [activeYear, setActiveYear] = useState(parseInt(format(today, 'yyyy')));
   const [activeMonth, setActiveMonth] = useState(format(today, 'MMM'));
+  const [requests, setRequests] = useState<Request[] | []>([]);
   let firstDayCurrentMonth = parse(`${activeMonth}-${activeYear}`, 'MMM-yyyy', new Date());
   
   const days = eachDayOfInterval({
@@ -15,7 +39,29 @@ function Calendar() {
     
   });
 
-
+  let requestDays:any = [];
+  
+  if (requests) {
+    for (let i = 0; i < days.length; i++) {
+      let requestDay:any = [];
+      requests.map((req) => {
+        if (req.status !== 'approved') return
+        if (!isWeekend(days[i]) && isWithinInterval(days[i], {
+          start: new Date(req.start_date),
+          end: add(new Date(req.end_date), { days: 1})
+        })) {
+          requestDay.push({
+            name: req.full_name,
+            type: req.type,
+            color: req.color
+          })
+        }
+      })
+      requestDays.push(requestDay) 
+    }
+  }
+  console.log(requestDays[20])
+  console.log(requests[0])
   const getDateColumn = (day: Date, dayIdx: number) => {
     if (dayIdx === 0) {
       const startColumn = getDay(day) + 1
@@ -23,6 +69,37 @@ function Calendar() {
     }
     return 'date'
   }
+
+  const fetchRequests = async () => {
+    const requestsRef = collection(db, "Requests");
+    const q = query(requestsRef, orderBy("start_date", "asc"))
+    const requestSnapshot = await getDocs(q); 
+    let tempRequestArray:Request[] = []
+    requestSnapshot.forEach((doc) => {
+        tempRequestArray.push(doc.data() as Request)
+    });
+
+    const employeeRef = collection(db, "Employees");
+    const employeeSnapshot = await getDocs(employeeRef); 
+    let tempEmployeeArray:Employee[] = []
+    employeeSnapshot.forEach((doc) => {
+        tempEmployeeArray.push(doc.data() as Employee)
+    });
+
+    let updatedTempArray = tempRequestArray.map((req) => {
+      const employee = tempEmployeeArray.filter((emp) => req.employee_id === emp.id)[0];
+      req.full_name = `${employee.first_name} ${employee.last_name}`;
+      req.color = nameColors[Math.floor(Math.random() * nameColors.length)]
+      return req
+    })
+    
+    setRequests(updatedTempArray)
+    setLoaded(true);
+  }
+
+  useEffect(() => {
+    fetchRequests();
+  },[])
   
   return (
     <div className="calendar">
@@ -51,15 +128,23 @@ function Calendar() {
         </div>
       </div>
       <div className="calendar-body">
-        <div className="days">
+        {loaded? <div className="days">
           {days.map((day, dayIdx) => (
             <div className={getDateColumn(day,dayIdx)} key={day.toString()}>
               <time className={`${!isSameMonth(day, firstDayCurrentMonth)? 'preview-date': ''}`} dateTime={format(day, 'yyyy-M-dd')}>
                 {format(day, 'd')}
               </time>
+              {requestDays[dayIdx].length> 0? <div className='days-requests'>{requestDays[dayIdx].map((req:any) => {
+                return <div className="days-request">
+                  <span className={`days-request-name`} style={{backgroundColor: req.color}}>{req.name}</span>
+                  <span className={`days-request-type ${typeColors[req.type]}`}>{req.type[0]}</span>
+                </div>
+                
+              })}</div>: <span></span>}
             </div>
           ))}
-        </div>
+        </div>:
+        <h1></h1>}
       </div>
     </div>
   )

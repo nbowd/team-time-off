@@ -19,4 +19,5 @@ export interface Request {
   end_date: string,
   approver: string,
   full_name?: string,
+  color?: string
 }

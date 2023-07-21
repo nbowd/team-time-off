@@ -83,6 +83,51 @@
   color: #868686;
 }
 
+.days-requests {
+  display: flex;
+  flex-direction: column;
+  gap: .25rem;
+  margin: 0 .15rem;
+}
+
+.days-request {
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.days-request-name {
+  background-color: purple;
+  color: white;
+  width: 90%;
+  padding: .25rem;
+  border-radius: 6px 0 0 6px;
+  font-weight: 500;
+
+
+}
+
+.days-request-type {
+  color: white;
+  padding: .25rem;
+  border-radius:0 6px 6px 0;
+  font-weight: bold;
+
+
+}
+
+.parental-leave {
+  background-color: rgb(255, 123, 0);
+}
+
+.sick-leave {
+  background-color: rgb(70, 70, 70);
+}
+
+.flex-leave {
+  background-color: rgb(5, 5, 170)
+}
+
 .col-2{
   grid-column-start: 2;
 }
