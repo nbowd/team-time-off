@@ -36,3 +36,21 @@ function App() {
 }
 
 export default App;
+
+
+/*
+TO DO:
+  - Add profile pictures
+  - Try realtime database updates
+  - Clear form content on submit
+  - Clear state/scenes from page on logout
+  - Search bars for users, my requests, handle requests
+  - Daily database function to update PTO values?
+  - Refactor and extract reused functions/components
+  - Either assign a request color to profile on creation or find a way to allow color selection
+  - Request filtering to not grab every request, but only the ones within the current viewable timeframe
+  - Security rules to not allow authorized users to create or update requests
+  - Adjust CSS in 'handle request' dropdown?
+  - Adjust CSS for input consistency on create/edit requests forms
+  - Loading icon
+*/ 

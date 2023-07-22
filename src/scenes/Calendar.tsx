@@ -53,15 +53,14 @@ function Calendar() {
           requestDay.push({
             name: req.full_name,
             type: req.type,
-            color: req.color
+            color: req.color,
+            id: req.id
           })
         }
       })
       requestDays.push(requestDay) 
     }
   }
-  console.log(requestDays[20])
-  console.log(requests[0])
   const getDateColumn = (day: Date, dayIdx: number) => {
     if (dayIdx === 0) {
       const startColumn = getDay(day) + 1
@@ -90,6 +89,7 @@ function Calendar() {
       const employee = tempEmployeeArray.filter((emp) => req.employee_id === emp.id)[0];
       req.full_name = `${employee.first_name} ${employee.last_name}`;
       req.color = nameColors[Math.floor(Math.random() * nameColors.length)]
+      req.id = employee.id
       return req
     })
     
@@ -134,11 +134,12 @@ function Calendar() {
               <time className={`${!isSameMonth(day, firstDayCurrentMonth)? 'preview-date': ''}`} dateTime={format(day, 'yyyy-M-dd')}>
                 {format(day, 'd')}
               </time>
-              {requestDays[dayIdx].length> 0? <div className='days-requests'>{requestDays[dayIdx].map((req:any) => {
-                return <div className="days-request">
-                  <span className={`days-request-name`} style={{backgroundColor: req.color}}>{req.name}</span>
-                  <span className={`days-request-type ${typeColors[req.type]}`}>{req.type[0]}</span>
-                </div>
+              {requestDays[dayIdx].length> 0? 
+                <div className='days-requests'>{requestDays[dayIdx].map((req:any) => {
+                  return  <div className="days-request" key={`request-${dayIdx}-${req.id}`}>
+                              <span className={`days-request-name`} style={{backgroundColor: req.color}}>{req.name}</span>
+                              <span className={`days-request-type ${typeColors[req.type]}`}>{req.type[0]}</span>
+                          </div>
                 
               })}</div>: <span></span>}
             </div>

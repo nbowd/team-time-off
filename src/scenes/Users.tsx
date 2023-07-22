@@ -63,9 +63,12 @@ function Users() {
           <div className="users-body-left">
             <h3>Name</h3>
             {users.map((user: Employee)=>(
-              <>
-                <UserRow user={user} active={user.id === activeUser?.id} setUser={setActiveUser}/>
-              </>
+                <UserRow
+                  key={user.id}
+                  user={user}
+                  active={user.id === activeUser?.id}
+                  setUser={setActiveUser}
+                />
             ))}
           </div>
           <div className="users-body-right">

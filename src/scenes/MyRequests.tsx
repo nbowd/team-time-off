@@ -6,7 +6,7 @@ import { Request } from '@/types';
 import firebase from "firebase/compat/app"; // for User props typing
 import editIcon from '@/assets/icons/icons8-pencil-30.png';
 import trashIcon from '@/assets/icons/icons8-trash-50.png';
-import { differenceInBusinessDays } from 'date-fns';
+import { add, differenceInBusinessDays } from 'date-fns';
 import Modal from '@/components/Modal';
 
 
@@ -46,9 +46,9 @@ function MyRequests({user}: MyRequestsProps) {
   
   const getBusinessDays = (start: string, end: string) => {
     const startDate = new Date(start);
-    const endDate = new Date(end);
+    const endDate = add(new Date(end), {days: 1})
 
-    const totalDays = differenceInBusinessDays(endDate, startDate) + 1;
+    const totalDays = differenceInBusinessDays(endDate, startDate);
     return totalDays
   }
 

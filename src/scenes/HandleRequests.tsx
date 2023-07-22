@@ -2,7 +2,7 @@ import '@/scenes/HandleRequests.css'
 import '@/scenes/MyRequests.css'
 import React,{ useState, useEffect } from 'react'
 import { db } from "@/firebaseSetup";
-import { collection, query, getDocs, orderBy, setDoc, doc  } from "firebase/firestore";
+import { collection, query, getDocs, orderBy, setDoc, doc, where  } from "firebase/firestore";
 import { Request, Employee } from '@/types';
 import firebase from "firebase/compat/app"; // for User props typing
 import { differenceInBusinessDays, add } from 'date-fns';
@@ -23,7 +23,7 @@ function HandleRequests({user}: MyRequestsProps) {
     const startDate = new Date(start);
     const endDate = add(new Date(end), {days: 1})
 
-    const totalDays = differenceInBusinessDays(endDate, startDate) + 1;
+    const totalDays = differenceInBusinessDays(endDate, startDate);
     return totalDays
   }
 
@@ -68,19 +68,25 @@ function HandleRequests({user}: MyRequestsProps) {
   }
 
   async function fetchRequests() {
-    const requestsRef = collection(db, "Requests");
-    const q = query(requestsRef, orderBy("start_date", "asc"))
-    const requestSnapshot = await getDocs(q); 
-    let tempRequestArray:Request[] = []
-    requestSnapshot.forEach((doc) => {
-        tempRequestArray.push(doc.data() as Request)
-    });
+    let currentUser: Employee | null= null;
 
     const employeeRef = collection(db, "Employees");
     const employeeSnapshot = await getDocs(employeeRef); 
     let tempEmployeeArray:Employee[] = []
     employeeSnapshot.forEach((doc) => {
-        tempEmployeeArray.push(doc.data() as Employee)
+        const employee = doc.data() as Employee;
+        tempEmployeeArray.push(employee)
+        if (user?.uid === employee.id) {
+          currentUser = employee
+        }
+    });
+    console.log(currentUser)
+    const requestsRef = collection(db, "Requests");
+    const q = query(requestsRef, where("approver", "==", `${currentUser!.first_name} ${currentUser!.last_name}`), orderBy("start_date", "asc"))
+    const requestSnapshot = await getDocs(q); 
+    let tempRequestArray:Request[] = []
+    requestSnapshot.forEach((doc) => {
+        tempRequestArray.push(doc.data() as Request)
     });
 
     let updatedTempArray = tempRequestArray.map((req) => {
