@@ -8,6 +8,7 @@ import clipboardIcon from '@/assets/icons/icons8-clipboard-32.png';
 import listIcon from '@/assets/icons/icons8-list-50.png';
 import usersIcon from '@/assets/icons/icons8-users-32.png';
 import logoutIcon from '@/assets/icons/icons8-logout-64.png';
+import cameraIcon from '@/assets/icons/icons8-add-camera-48.png';
 import { useEffect, useRef, useState } from 'react';
 import firebase from "firebase/compat/app"; // used for interface types;
 import { Link, useLocation  } from "react-router-dom";
@@ -43,7 +44,12 @@ function Profile({user}: ProfileProps) {
   return (
     <div className="profile">
       <div className="profile-info">
-        <img className='profile-picture' src={defaultProfile} alt="default profile picture" />
+        <div className="profile-picture-wrapper">
+          <span className="picture-icon-wrapper">
+            <img className='profile-picture-icon' src={cameraIcon} alt="" />
+          </span>
+          <img className='profile-picture' src={defaultProfile} alt="default profile picture" />
+        </div>
         <h2>{profile?.first_name} {profile?.last_name}</h2>
         <h3>Remaining PTO Days: {profile?.remaining_pto}</h3>
         <h3>Used PTO Days: {profile?.used_pto}</h3>
