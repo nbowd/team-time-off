@@ -8,9 +8,6 @@ import defaultProfile from '@/assets/default_profile.jpg';
 import { Doughnut } from 'react-chartjs-2';
 import 'chart.js/auto';
 
-
-
-
 function Users() {
   const [loaded, setLoaded] = useState(false);
   const [users, setUsers] = useState<Employee[] | []>([]);
@@ -49,6 +46,7 @@ function Users() {
     return data
   }
 
+
   useEffect(() => {
     getProfile();
   }, [])
@@ -73,7 +71,7 @@ function Users() {
           </div>
           <div className="users-body-right">
             <div className='users-body-right-profile'>
-              <img src={defaultProfile} alt="Profile Picture" />
+              <img src={activeUser?.profile_picture? activeUser.profile_picture: defaultProfile} alt="Profile Picture" />
               <span>{activeUser?.first_name} {activeUser?.last_name}</span>
               <span>{activeUser?.email}</span>
             </div>

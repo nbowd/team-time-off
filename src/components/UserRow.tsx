@@ -14,7 +14,7 @@ function UserRow({user, active, setUser}: UserRowProps) {
   return (
     <div key={user.id} className={active? 'user-row user-active': 'user-row'} onClick={() => setUser(user)}>
       <div className='user-profile-info'>
-        <img src={defaultProfile} alt="profile picture" className='user-row-profile-picture' />
+        <img src={user.profile_picture? user.profile_picture: defaultProfile} alt="profile picture" className='user-row-profile-picture' />
         <div className="user-name-email">
           <span className='user-name'>{`${user.first_name} ${user.last_name}`}</span>
           <span className='user-email'>{user.email}</span>

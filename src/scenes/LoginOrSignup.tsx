@@ -1,6 +1,6 @@
 import { useState, useRef } from "react"
 import { auth, db } from "@/firebaseSetup";
-import { collection, addDoc } from "firebase/firestore"; 
+import { collection, addDoc, setDoc, doc } from "firebase/firestore"; 
 import '@/scenes/LoginOrSignup.css';
 
 const TOTAL_PTO = 25;
@@ -39,18 +39,34 @@ function LoginOrSignup() {
       )
       const newUser = response.user;
         
-      await addDoc(collection(db, "Employees"), {
-        id: newUser!.uid,
-        first_name: firstNameRef.current!.value,
-        last_name: lastNameRef.current!.value,
-        email: newUser!.email,
-        manager_privileges: false,
-        remaining_pto: TOTAL_PTO,
-        used_pto: 0,
-        profile_picture: null,
-        national_holidays: 'US'
+      const newDocRef = doc(collection(db, "Employees"));
+      await setDoc(
+        newDocRef, {
+          id: newDocRef.id,
+          employee_id: newUser!.uid,
+          first_name: firstNameRef.current!.value,
+          last_name: lastNameRef.current!.value,
+          email: newUser!.email,
+          manager_privileges: true,
+          remaining_pto: TOTAL_PTO,
+          used_pto: 0,
+          profile_picture: null,
+          national_holidays: 'US'
+        }
+      )
 
-      });
+      // await addDoc(collection(db, "Employees"), {
+      //   id: newUser!.uid,
+      //   first_name: firstNameRef.current!.value,
+      //   last_name: lastNameRef.current!.value,
+      //   email: newUser!.email,
+      //   manager_privileges: false,
+      //   remaining_pto: TOTAL_PTO,
+      //   used_pto: 0,
+      //   profile_picture: null,
+      //   national_holidays: 'US'
+
+      // });
 
     } catch (error) {
       console.log(error)

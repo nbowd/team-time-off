@@ -48,14 +48,14 @@ function Modal({modalRef, profile, request, type}: ModalProps) {
     }
 
     const handleCreate = async () => {
-      if (user?.uid !== profile?.id) return
+      if (user?.uid !== profile?.employee_id) return
       try {
         const newDocRef = doc(collection(db, "Requests"));
         await setDoc(
           newDocRef,
           {
             id: newDocRef.id,
-            employee_id: profile?.id,
+            employee_id: profile?.employee_id,
             status: 'pending',
             type: leaveType,
             start_date: dateStart,
@@ -119,7 +119,7 @@ function Modal({modalRef, profile, request, type}: ModalProps) {
     },[request])
 
     return (
-      <dialog ref={modalRef} onClick={(e) => onDialogClick(e)} >
+      <dialog ref={modalRef} onClick={(e) => onDialogClick(e)} className="modal">
       <div className="dialog-div">
         <div className='modal-form'>
           <h2>New Request:</h2>

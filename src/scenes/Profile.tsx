@@ -13,6 +13,7 @@ import { useEffect, useRef, useState } from 'react';
 import firebase from "firebase/compat/app"; // used for interface types;
 import { Link, useLocation  } from "react-router-dom";
 import Modal from '@/components/Modal';
+import PictureModal from '@/components/PictureModal';
 import { Employee } from '@/types';
 
 interface ProfileProps {
@@ -22,8 +23,10 @@ interface ProfileProps {
 function Profile({user}: ProfileProps) {
   const location = useLocation();
   const [profile, setProfile] = useState<Employee | null>(null);
+  const [profilePicture, setProfilePicture] = useState(defaultProfile)
 
   const modalRef = useRef<HTMLDialogElement>(null);
+  const pictureModalRef = useRef<HTMLDialogElement>(null);
 
   const signOut = async () => {
     await auth.signOut();
@@ -32,11 +35,18 @@ function Profile({user}: ProfileProps) {
   const getProfile = async () => {
     const querySnapshot = await getDocs(collection(db, "Employees"));
     querySnapshot.forEach((doc) => {
-      if (doc.data() && user!.uid === doc.data().id) {
+      if (doc.data() && user!.uid === doc.data().employee_id) {
         setProfile(doc.data() as Employee);
+        setProfilePicture(doc.data().profile_picture)
       }
     });
   }
+
+  const openPictureModal = () => {
+    console.log('opening?', pictureModalRef)
+    pictureModalRef.current?.showModal()  
+  }
+
   useEffect(() => {
     getProfile();
   }, [])
@@ -44,11 +54,11 @@ function Profile({user}: ProfileProps) {
   return (
     <div className="profile">
       <div className="profile-info">
-        <div className="profile-picture-wrapper">
+        <div className="profile-picture-wrapper" onClick={() => pictureModalRef.current?.showModal()}>
           <span className="picture-icon-wrapper">
             <img className='profile-picture-icon' src={cameraIcon} alt="" />
           </span>
-          <img className='profile-picture' src={defaultProfile} alt="default profile picture" />
+          <img className='profile-picture' src={profilePicture} alt="default profile picture" />
         </div>
         <h2>{profile?.first_name} {profile?.last_name}</h2>
         <h3>Remaining PTO Days: {profile?.remaining_pto}</h3>
@@ -59,7 +69,7 @@ function Profile({user}: ProfileProps) {
           <img src={plusIcon} alt="" className="profile-icon" />
           MAKE NEW REQUEST
         </button>
-
+        <PictureModal pictureModalRef={pictureModalRef} user={user} profile={profile} setProfilePicture={setProfilePicture} />
         <Modal modalRef={modalRef} profile={profile} type={'create'} />
         <Link to='/' className={`calendar-nav ${location.pathname === '/'? 'current-nav': ''}`}>
           <img src={calendarIcon} alt="" className="profile-icon" />

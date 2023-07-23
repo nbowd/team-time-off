@@ -76,11 +76,10 @@ function HandleRequests({user}: MyRequestsProps) {
     employeeSnapshot.forEach((doc) => {
         const employee = doc.data() as Employee;
         tempEmployeeArray.push(employee)
-        if (user?.uid === employee.id) {
+        if (user?.uid === employee.employee_id) {
           currentUser = employee
         }
     });
-    console.log(currentUser)
     const requestsRef = collection(db, "Requests");
     const q = query(requestsRef, where("approver", "==", `${currentUser!.first_name} ${currentUser!.last_name}`), orderBy("start_date", "asc"))
     const requestSnapshot = await getDocs(q); 
@@ -90,7 +89,7 @@ function HandleRequests({user}: MyRequestsProps) {
     });
 
     let updatedTempArray = tempRequestArray.map((req) => {
-      const employee = tempEmployeeArray.filter((emp) => req.employee_id === emp.id)[0];
+      const employee = tempEmployeeArray.filter((emp) => req.employee_id === emp.employee_id)[0];
       req.full_name = `${employee.first_name} ${employee.last_name}`;
       return req
     })

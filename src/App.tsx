@@ -54,4 +54,5 @@ TO DO:
   - Adjust CSS for input consistency on create/edit requests forms
   - Loading icon
   - Error Handling for request creation/edit
+  - Add database rules to delete all requests associated with a User when they delete their account?
 */ 

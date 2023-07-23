@@ -54,7 +54,7 @@ function Calendar() {
             name: req.full_name,
             type: req.type,
             color: req.color,
-            id: req.id
+            employee_id: req.employee_id
           })
         }
       })
@@ -84,16 +84,17 @@ function Calendar() {
     employeeSnapshot.forEach((doc) => {
         tempEmployeeArray.push(doc.data() as Employee)
     });
-
-    let updatedTempArray = tempRequestArray.map((req) => {
-      const employee = tempEmployeeArray.filter((emp) => req.employee_id === emp.id)[0];
-      req.full_name = `${employee.first_name} ${employee.last_name}`;
-      req.color = nameColors[Math.floor(Math.random() * nameColors.length)]
-      req.id = employee.id
-      return req
-    })
-    
-    setRequests(updatedTempArray)
+    if (tempEmployeeArray.length > 0 && tempRequestArray.length > 0) {
+      let updatedTempArray = tempRequestArray.map((req) => {
+        const employee = tempEmployeeArray.filter((emp) => req.employee_id === emp.employee_id)[0];
+        req.full_name = `${employee.first_name} ${employee.last_name}`;
+        req.color = nameColors[Math.floor(Math.random() * nameColors.length)]
+        req.employee_id = employee.employee_id
+        return req
+      })
+      
+      setRequests(updatedTempArray)
+    }
     setLoaded(true);
   }
 
@@ -136,7 +137,7 @@ function Calendar() {
               </time>
               {requestDays[dayIdx].length> 0? 
                 <div className='days-requests'>{requestDays[dayIdx].map((req:any) => {
-                  return  <div className="days-request" key={`request-${dayIdx}-${req.id}`}>
+                  return  <div className="days-request" key={`request-${dayIdx}-${req.employee_id}`}>
                               <span className={`days-request-name`} style={{backgroundColor: req.color}}>{req.name}</span>
                               <span className={`days-request-type ${typeColors[req.type]}`}>{req.type[0]}</span>
                           </div>

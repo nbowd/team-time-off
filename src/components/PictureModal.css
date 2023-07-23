@@ -1,0 +1,24 @@
+.picture-modal {
+  width: 30%;
+  height: 20%;
+}
+.picture-modal-div {
+  display: flex;
+  flex-direction: column;
+}
+
+.picture-modal-upload {
+  width: 6rem;
+  height: 2.5rem;
+  align-self: center;
+  margin-top: 2rem;
+  background-color: #05B4FF;
+  color: white;
+  border:none;
+  border-radius: 5px;
+  height: 2.5rem;
+}
+
+.picture-modal-upload:disabled {
+  background-color: gray;
+}
