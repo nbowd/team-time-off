@@ -2,7 +2,6 @@ import '@/components/UserRow.css'
 import { Employee } from '@/types'
 import defaultProfile from '@/assets/default_profile.jpg';
 import triangle from '@/assets/icons/icons8-triangle-30.png';
-import React, { useState } from 'react'
 
 interface UserRowProps {
   user: Employee,

@@ -5,7 +5,7 @@ import React, { useState, useContext, useEffect } from 'react'
 import '@/components/Modal.css'
 import { Employee, Request } from "@/types";
 import { db } from "@/firebaseSetup";
-import { collection, doc, getDocs, orderBy, query, setDoc, where } from "firebase/firestore";
+import { collection, doc, getDocs, query, setDoc, where } from "firebase/firestore";
 import { AuthContext } from "@/context/AuthContext";
 
 

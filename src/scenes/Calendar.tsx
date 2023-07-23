@@ -1,7 +1,7 @@
 import '@/scenes/Calendar.css'
 import { isWithinInterval, eachDayOfInterval, endOfMonth, endOfWeek, format, getDay, isSameMonth, parse, startOfToday, startOfWeek, add, isWeekend } from 'date-fns';
 import { useState, useEffect } from 'react'
-import { collection, query, getDocs, orderBy, setDoc, doc } from "firebase/firestore";
+import { collection, query, getDocs, orderBy} from "firebase/firestore";
 import { db } from "@/firebaseSetup";
 import { Employee, Request } from '@/types';
 

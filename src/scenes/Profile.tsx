@@ -45,11 +45,6 @@ function Profile({user}: ProfileProps) {
     });
   }
 
-  const openPictureModal = () => {
-    console.log('opening?', pictureModalRef)
-    pictureModalRef.current?.showModal()  
-  }
-
   useEffect(() => {
     getProfile();
   }, [])

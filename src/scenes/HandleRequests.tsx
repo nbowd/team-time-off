@@ -17,7 +17,6 @@ interface MyRequestsProps {
 
 function HandleRequests({user}: MyRequestsProps) {
   const [checkedRequests, setCheckedRequests] = useState(false);
-  const [requests, setRequests] = useState<Request[] | []>([]);
   const [rows, setRows] = useState<React.ReactNode[] | []>([]);
   
   const getBusinessDays = (start: string, end: string) => {
@@ -95,8 +94,7 @@ function HandleRequests({user}: MyRequestsProps) {
       return req
     })
 
-    setRequests(updatedTempArray);
-    buildRows(tempRequestArray);
+    buildRows(updatedTempArray);
     setCheckedRequests(true);
   }
 
