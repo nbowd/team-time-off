@@ -46,6 +46,9 @@ function Users() {
     return data
   }
 
+  if (!activeUser) {
+    getProfile();
+  }
 
   useEffect(() => {
     getProfile();

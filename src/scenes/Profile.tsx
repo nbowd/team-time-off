@@ -23,8 +23,7 @@ interface ProfileProps {
 function Profile({user}: ProfileProps) {
   const location = useLocation();
   const [profile, setProfile] = useState<Employee | null>(null);
-  const [profilePicture, setProfilePicture] = useState(defaultProfile)
-
+  const [profilePicture, setProfilePicture] = useState(defaultProfile) 
   const modalRef = useRef<HTMLDialogElement>(null);
   const pictureModalRef = useRef<HTMLDialogElement>(null);
 
@@ -36,8 +35,12 @@ function Profile({user}: ProfileProps) {
     const querySnapshot = await getDocs(collection(db, "Employees"));
     querySnapshot.forEach((doc) => {
       if (doc.data() && user!.uid === doc.data().employee_id) {
-        setProfile(doc.data() as Employee);
-        setProfilePicture(doc.data().profile_picture)
+        const employee = doc.data() as Employee;
+        setProfile(employee);
+        
+        if (employee.profile_picture) {
+          setProfilePicture(doc.data().profile_picture)
+        }
       }
     });
   }

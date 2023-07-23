@@ -16,6 +16,7 @@ interface MyRequestsProps {
 }
 
 function HandleRequests({user}: MyRequestsProps) {
+  const [checkedRequests, setCheckedRequests] = useState(false);
   const [requests, setRequests] = useState<Request[] | []>([]);
   const [rows, setRows] = useState<React.ReactNode[] | []>([]);
   
@@ -96,6 +97,11 @@ function HandleRequests({user}: MyRequestsProps) {
 
     setRequests(updatedTempArray);
     buildRows(tempRequestArray);
+    setCheckedRequests(true);
+  }
+
+  if (!checkedRequests) {
+    fetchRequests();
   }
   
   useEffect(() => {

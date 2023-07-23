@@ -17,13 +17,15 @@
   width: 100%;
 }
 
-.modal-type, .modal-approver {
+.Dropdown-root  {
   border: 1px solid black;
-  border-radius: 3px;
+  border-radius: 4px;
   /* box-shadow: 10px 5px 5px red; */
 }
 
 .is-open .Dropdown-control, .is-open .Dropdown-menu {
+  border: 1px solid black;
+  
   box-shadow: 0 0 0 2px #79b1ff;
 }
 
