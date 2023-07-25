@@ -40,9 +40,7 @@ export default App;
 
 /*
 TO DO:
-  - Add profile pictures
   - Try realtime database updates
-  - Clear form content on submit
   - Clear state/scenes from page on logout
   - Search bars for users, my requests, handle requests
   - Daily database function to update PTO values?

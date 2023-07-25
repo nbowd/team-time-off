@@ -63,6 +63,10 @@ function Modal({modalRef, profile, request, type}: ModalProps) {
             approver: approver
           }
         )
+        setApprover('')
+        setLeaveType('')
+        setDateStart('')
+        setDateEnd('')
         modalRef.current?.close()
       } catch (error) {
         console.log(error)
@@ -102,10 +106,11 @@ function Modal({modalRef, profile, request, type}: ModalProps) {
       querySnapshot.forEach((doc) => {
         // doc.data() is never undefined for query doc snapshots
           const user = doc.data() as Employee;
-          tempArray.push(`${user.first_name} ${user.last_name}`)
+          if (user.employee_id !== profile?.employee_id) {
+            tempArray.push(`${user.first_name} ${user.last_name}`)
+          }
       });
       setManagers(tempArray)
-  
     }
 
     useEffect(() => {
