@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { collection, query, getDocs, orderBy} from "firebase/firestore";
 import { db } from "@/firebaseSetup";
 import { Employee, Request } from '@/types';
+import firebase from "firebase/compat/app"; // used for interface types;
 
 interface colorsType {
   [key: string]: string;
@@ -24,9 +25,14 @@ const nameColors = [
   '#00644E',
 ]
 
-function Calendar() {
+interface CalendarProps {
+  user: firebase.User | null
+}
+
+function Calendar({user}: CalendarProps) {
   let today = startOfToday();
 
+  const [checkedRequests, setCheckedRequests] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const [activeYear, setActiveYear] = useState(parseInt(format(today, 'yyyy')));
   const [activeMonth, setActiveMonth] = useState(format(today, 'MMM'));
@@ -70,6 +76,11 @@ function Calendar() {
   }
 
   const fetchRequests = async () => {
+    setCheckedRequests(true);
+    if (!user) {
+      setLoaded(true)
+      return
+    }
     const requestsRef = collection(db, "Requests");
     const q = query(requestsRef, orderBy("start_date", "asc"))
     const requestSnapshot = await getDocs(q); 
@@ -96,6 +107,10 @@ function Calendar() {
       setRequests(updatedTempArray)
     }
     setLoaded(true);
+  }
+
+  if (!checkedRequests) {
+    fetchRequests();
   }
 
   useEffect(() => {

@@ -11,7 +11,7 @@ import logoutIcon from '@/assets/icons/icons8-logout-64.png';
 import cameraIcon from '@/assets/icons/icons8-add-camera-48.png';
 import { useEffect, useRef, useState } from 'react';
 import firebase from "firebase/compat/app"; // used for interface types;
-import { Link, useLocation  } from "react-router-dom";
+import { Link, useLocation,useNavigate   } from "react-router-dom";
 import Modal from '@/components/Modal';
 import PictureModal from '@/components/PictureModal';
 import { Employee } from '@/types';
@@ -21,6 +21,7 @@ interface ProfileProps {
 }
 
 function Profile({user}: ProfileProps) {
+  const navigate = useNavigate();
   const location = useLocation();
   const [profile, setProfile] = useState<Employee | null>(null);
   const [profilePicture, setProfilePicture] = useState(defaultProfile) 
@@ -29,6 +30,7 @@ function Profile({user}: ProfileProps) {
 
   const signOut = async () => {
     await auth.signOut();
+    navigate("/")
   }
 
   const getProfile = async () => {

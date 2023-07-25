@@ -25,7 +25,7 @@ function App() {
       </div>
       
       <Routes>
-        <Route path="/" element={<Calendar />} />
+        <Route path="/" element={<Calendar user={user} />} />
         <Route path="/requests" element={<HandleRequests user={user} />} />
         <Route path="/requests/:id" element={<MyRequests user={user} />} />
         <Route path="/users" element={<Users />} />
