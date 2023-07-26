@@ -32,7 +32,6 @@ interface CalendarProps {
 function Calendar({user}: CalendarProps) {
   let today = startOfToday();
 
-  const [checkedRequests, setCheckedRequests] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const [activeYear, setActiveYear] = useState(parseInt(format(today, 'yyyy')));
   const [activeMonth, setActiveMonth] = useState(format(today, 'MMM'));
@@ -76,11 +75,6 @@ function Calendar({user}: CalendarProps) {
   }
 
   const fetchRequests = async () => {
-    setCheckedRequests(true);
-    if (!user) {
-      setLoaded(true)
-      return
-    }
     const requestsRef = collection(db, "Requests");
     const q = query(requestsRef, orderBy("start_date", "asc"))
     const requestSnapshot = await getDocs(q); 
@@ -109,13 +103,14 @@ function Calendar({user}: CalendarProps) {
     setLoaded(true);
   }
 
-  if (!checkedRequests) {
-    fetchRequests();
-  }
 
   useEffect(() => {
+    if (!user) {
+      setLoaded(true)
+      return
+    }
     fetchRequests();
-  },[])
+  }, [user])
   
   return (
     <div className="calendar">
