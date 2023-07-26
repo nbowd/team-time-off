@@ -41,8 +41,6 @@ export default App;
 /*
 TO DO:
   - Try realtime database updates
-  - Clear state/scenes from page on logout
-  - Search bars for users, my requests, handle requests
   - Daily database function to update PTO values?
   - Refactor and extract reused functions/components
   - Either assign a request color to profile on creation or find a way to allow color selection
@@ -53,4 +51,5 @@ TO DO:
   - Loading icon
   - Error Handling for request creation/edit
   - Add database rules to delete all requests associated with a User when they delete their account?
+  - Add default table text when no requests are found
 */ 

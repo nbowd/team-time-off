@@ -1,6 +1,6 @@
 import '@/scenes/Users.css'
 import { db } from "@/firebaseSetup";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, orderBy, query } from "firebase/firestore";
 import {useState, useEffect} from 'react'
 import { Employee } from '@/types';
 import UserRow from '@/components/UserRow';
@@ -14,7 +14,9 @@ function Users() {
   const [activeUser, setActiveUser] = useState<Employee | null>(null);
 
   const getProfile = async () => {
-    const querySnapshot = await getDocs(collection(db, "Employees"));
+    const employeesRef = collection(db, "Employees");
+    const q = query(employeesRef, orderBy('last_name', 'asc'))
+    const querySnapshot = await getDocs(q);
     let tempArray:Employee[] = []
     querySnapshot.forEach((doc) => {
         tempArray.push(doc.data() as Employee)
@@ -45,14 +47,16 @@ function Users() {
     };
     return data
   }
-
+  
   if (!activeUser) {
     getProfile();
   }
 
   useEffect(() => {
-    getProfile();
-  }, [])
+    if (!loaded) {
+      getProfile();
+    }
+  }, [loaded])
   return (
     
     <div className="users">
@@ -63,14 +67,14 @@ function Users() {
         <div className="users-body">
           <div className="users-body-left">
             <h3>Name</h3>
-            {users.map((user: Employee)=>(
-                <UserRow
-                  key={user.id}
-                  user={user}
-                  active={user.id === activeUser?.id}
-                  setUser={setActiveUser}
-                />
-            ))}
+            { users.map((user: Employee)=>(
+              <UserRow
+                key={user.id}
+                user={user}
+                active={user.id === activeUser?.id}
+                setUser={setActiveUser}
+              />))
+            }
           </div>
           <div className="users-body-right">
             <div className='users-body-right-profile'>

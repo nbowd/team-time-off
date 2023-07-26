@@ -7,9 +7,7 @@ import { Request, Employee } from '@/types';
 import firebase from "firebase/compat/app"; // for User props typing
 import { differenceInBusinessDays, add } from 'date-fns';
 import Dropdown, { Option } from "react-dropdown";
-
-
-// req.status.toUpperCase()[0] + req.status.slice(1)
+import SearchBar from '@/components/SearchBar';
 
 interface MyRequestsProps {
   user?: firebase.User | null;
@@ -17,6 +15,7 @@ interface MyRequestsProps {
 
 function HandleRequests({user}: MyRequestsProps) {
   const [checkedRequests, setCheckedRequests] = useState(false);
+  const [requests, setRequests] = useState<Request[] | []>([]);
   const [rows, setRows] = useState<React.ReactNode[] | []>([]);
   
   const getBusinessDays = (start: string, end: string) => {
@@ -41,7 +40,10 @@ function HandleRequests({user}: MyRequestsProps) {
   }
 
   const buildRows = (reqs: Request[]) => {
-    if (reqs.length === 0) return
+    if (reqs.length === 0) {
+      setRows([])
+      return
+    }
     let tempRows:React.ReactNode[] = [];
 
     reqs.map((req: Request, mapIdx) => {
@@ -95,6 +97,7 @@ function HandleRequests({user}: MyRequestsProps) {
     })
 
     buildRows(updatedTempArray);
+    setRequests(updatedTempArray);
     setCheckedRequests(true);
   }
 
@@ -110,6 +113,7 @@ function HandleRequests({user}: MyRequestsProps) {
     <div className="handle-requests">
       <div className="handle-requests-heading">
         <h1>Handle Requests</h1>
+        <SearchBar requests={requests} buildRows={buildRows} />
       </div>
       <div className="handle-requests-body">
         <div className="handle-requests-col-headers">
@@ -120,9 +124,13 @@ function HandleRequests({user}: MyRequestsProps) {
           <span className="request-col-header">Date End</span>
           <span className="request-col-header">Total Days</span>
         </div>
-        <div className="handle-requests-rows">
-          {rows}
-        </div>
+        {rows.length > 0?
+          <div className="handle-requests-rows">
+            {rows}
+          </div>
+        :
+          <div className='no-requests-found'>No Requests Found</div>
+        }
       </div>
     </div>
   )

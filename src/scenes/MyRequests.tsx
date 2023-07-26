@@ -54,7 +54,10 @@ function MyRequests({user}: MyRequestsProps) {
   }
 
   const buildRows = (reqs: Request[]) => {
-    if (reqs.length === 0) return
+    if (reqs.length === 0) {
+      setRows([])
+      return
+    }
     let tempRows:React.ReactNode[] = [];
 
     reqs.map((req: Request, mapIdx) => {
@@ -117,9 +120,13 @@ function MyRequests({user}: MyRequestsProps) {
           <span className="request-col-header">Date End</span>
           <span className="request-col-header">Total Days</span>
         </div>
-        <div className="my-requests-rows">
-          {rows}
-        </div>
+        {rows.length > 0?
+          <div className="my-requests-rows">
+            {rows}
+          </div>
+        :
+          <div className='no-results-found'>No Requests Found</div>
+        }
       </div>
     </div>
   )
