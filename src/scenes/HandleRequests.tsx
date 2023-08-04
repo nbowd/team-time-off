@@ -129,7 +129,7 @@ function HandleRequests({user}: MyRequestsProps) {
             {rows}
           </div>
         :
-          <div className='no-requests-found'>No Requests Found</div>
+          <div className='no-results-found'>No Requests Found</div>
         }
       </div>
     </div>
