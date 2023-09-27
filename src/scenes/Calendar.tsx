@@ -97,7 +97,7 @@ function Calendar({user}: CalendarProps) {
         req.employee_id = employee.employee_id
         return req
       })
-      
+      console.log(updatedTempArray)
       setRequests(updatedTempArray)
     }
     setLoaded(true);
