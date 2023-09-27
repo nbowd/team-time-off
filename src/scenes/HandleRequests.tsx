@@ -2,10 +2,10 @@ import '@/scenes/HandleRequests.css'
 import '@/scenes/MyRequests.css'
 import React,{ useState, useEffect } from 'react'
 import { db } from "@/firebaseSetup";
-import { collection, query, getDocs, orderBy, setDoc, doc, where  } from "firebase/firestore";
+import { collection, query, getDoc, getDocs, orderBy, setDoc, doc, where  } from "firebase/firestore";
 import { Request, Employee } from '@/types';
+import { getBusinessDays } from '@/utils/helpers';
 import firebase from "firebase/compat/app"; // for User props typing
-import { differenceInBusinessDays, add } from 'date-fns';
 import Dropdown, { Option } from "react-dropdown";
 import SearchBar from '@/components/SearchBar';
 
@@ -17,13 +17,39 @@ function HandleRequests({user}: MyRequestsProps) {
   const [checkedRequests, setCheckedRequests] = useState(false);
   const [requests, setRequests] = useState<Request[] | []>([]);
   const [rows, setRows] = useState<React.ReactNode[] | []>([]);
-  
-  const getBusinessDays = (start: string, end: string) => {
-    const startDate = new Date(start);
-    const endDate = add(new Date(end), {days: 1})
 
-    const totalDays = differenceInBusinessDays(endDate, startDate);
-    return totalDays
+  const subtractPTO = async (id: string, amount: number) => {
+    const docSnap = await getDoc(doc(db, "Employees", id));
+    
+    if (docSnap.exists()) {
+      const employee = docSnap.data() as Employee;
+      try {
+        await setDoc(doc(db, "Employees", id), {
+          ...docSnap.data(),
+          remaining_pto: employee.remaining_pto - amount,
+          used_pto: employee.used_pto + amount
+        })
+      } catch (error) {
+        console.log(error)
+      }
+    }
+  }
+
+  const addPTO = async (id: string, amount: number) => {
+    const docSnap = await getDoc(doc(db, "Employees", id));
+    
+    if (docSnap.exists()) {
+      const employee = docSnap.data() as Employee;
+      try {
+        await setDoc(doc(db, "Employees", id), {
+          ...docSnap.data(),
+          remaining_pto: employee.remaining_pto + amount,
+          used_pto: employee.used_pto - amount
+        })
+      } catch (error) {
+        console.log(error)
+      }
+    }
   }
 
   const changeStatus = async (option: Option, req: Request) => {
@@ -32,6 +58,14 @@ function HandleRequests({user}: MyRequestsProps) {
         ...req,
         status: option.value.toLowerCase()
       })
+
+      if (option.value.toLowerCase() === 'approved' && req.status.toLowerCase() !== 'approved') {
+        subtractPTO(req.employee_id, getBusinessDays(req.start_date, req.end_date))
+      }
+      console.log(option.value, req.status)
+      if (option.value.toLowerCase() !== 'approved' && req.status.toLowerCase() === 'approved') {
+        addPTO(req.employee_id, getBusinessDays(req.start_date, req.end_date))
+      }
       fetchRequests();
     } catch (error) {
       console.log(error)
@@ -70,7 +104,7 @@ function HandleRequests({user}: MyRequestsProps) {
   }
 
   async function fetchRequests() {
-    let currentUser: Employee | null= null;
+    let currentUser = {} as Employee;
 
     const employeeRef = collection(db, "Employees");
     const employeeSnapshot = await getDocs(employeeRef); 
@@ -82,16 +116,18 @@ function HandleRequests({user}: MyRequestsProps) {
           currentUser = employee
         }
     });
+    
+    if (currentUser === null) return
     const requestsRef = collection(db, "Requests");
-    const q = query(requestsRef, where("approver", "==", `${currentUser!.first_name} ${currentUser!.last_name}`), orderBy("start_date", "asc"))
+    const q = query(requestsRef, where("approver", "==", `${currentUser.first_name} ${currentUser.last_name}`), orderBy("start_date", "asc"))
     const requestSnapshot = await getDocs(q); 
     let tempRequestArray:Request[] = []
     requestSnapshot.forEach((doc) => {
-        tempRequestArray.push(doc.data() as Request)
+      tempRequestArray.push(doc.data() as Request)
     });
 
     let updatedTempArray = tempRequestArray.map((req) => {
-      const employee = tempEmployeeArray.filter((emp) => req.employee_id === emp.employee_id)[0];
+      const employee = tempEmployeeArray.filter((emp) => req.employee_id === emp.id)[0];
       req.full_name = `${employee.first_name} ${employee.last_name}`;
       return req
     })

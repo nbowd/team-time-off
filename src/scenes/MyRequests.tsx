@@ -6,8 +6,8 @@ import { Request } from '@/types';
 import firebase from "firebase/compat/app"; // for User props typing
 import editIcon from '@/assets/icons/icons8-pencil-30.png';
 import trashIcon from '@/assets/icons/icons8-trash-50.png';
-import { add, differenceInBusinessDays } from 'date-fns';
 import Modal from '@/components/Modal';
+import { getBusinessDays, getProfile } from '@/utils/helpers';
 
 
 interface MyRequestsProps {
@@ -44,14 +44,6 @@ function MyRequests({user}: MyRequestsProps) {
     setRequests(filteredRequests);
     buildRows(filteredRequests)
   }
-  
-  const getBusinessDays = (start: string, end: string) => {
-    const startDate = new Date(start);
-    const endDate = add(new Date(end), {days: 1})
-
-    const totalDays = differenceInBusinessDays(endDate, startDate);
-    return totalDays
-  }
 
   const buildRows = (reqs: Request[]) => {
     if (reqs.length === 0) {
@@ -84,8 +76,10 @@ function MyRequests({user}: MyRequestsProps) {
   }
 
   const fetchRequests = async () => {
+    const currentUser = await getProfile(user!);
+
     const requestsRef = collection(db, "Requests");
-    const q = query(requestsRef, where("employee_id", "==", `${user?.uid}`), orderBy("start_date", "asc"))
+    const q = query(requestsRef, where("employee_id", "==", `${currentUser.id}`), orderBy("start_date", "asc"))
     const querySnapshot = await getDocs(q); 
     let tempArray:Request[] = []
     querySnapshot.forEach((doc) => {

@@ -47,6 +47,7 @@ function Calendar({user}: CalendarProps) {
   let requestDays:any = [];
   
   if (requests) {
+    // console.log(requests)
     for (let i = 0; i < days.length; i++) {
       let requestDay:any = [];
       requests.map((req) => {
@@ -65,6 +66,7 @@ function Calendar({user}: CalendarProps) {
       })
       requestDays.push(requestDay) 
     }
+    // console.log(requestDays)
   }
   const getDateColumn = (day: Date, dayIdx: number) => {
     if (dayIdx === 0) {
@@ -89,15 +91,15 @@ function Calendar({user}: CalendarProps) {
     employeeSnapshot.forEach((doc) => {
         tempEmployeeArray.push(doc.data() as Employee)
     });
+
     if (tempEmployeeArray.length > 0 && tempRequestArray.length > 0) {
       let updatedTempArray = tempRequestArray.map((req) => {
-        const employee = tempEmployeeArray.filter((emp) => req.employee_id === emp.employee_id)[0];
+        const employee = tempEmployeeArray.filter((emp) => req.employee_id === emp.id)[0];
         req.full_name = `${employee.first_name} ${employee.last_name}`;
         req.color = nameColors[Math.floor(Math.random() * nameColors.length)]
-        req.employee_id = employee.employee_id
+        req.employee_id = employee.id
         return req
       })
-      console.log(updatedTempArray)
       setRequests(updatedTempArray)
     }
     setLoaded(true);

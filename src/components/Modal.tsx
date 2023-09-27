@@ -7,6 +7,7 @@ import { Employee, Request } from "@/types";
 import { db } from "@/firebaseSetup";
 import { collection, doc, getDocs, query, setDoc, where } from "firebase/firestore";
 import { AuthContext } from "@/context/AuthContext";
+import { getBusinessDays } from "@/utils/helpers";
 
 
 
@@ -49,13 +50,17 @@ function Modal({modalRef, profile, request, type}: ModalProps) {
 
     const handleCreate = async () => {
       if (user?.uid !== profile?.employee_id) return
+      const numberOfDays = getBusinessDays(dateStart, dateEnd);
+      if (profile!.remaining_pto < numberOfDays) {
+        return
+      }
       try {
         const newDocRef = doc(collection(db, "Requests"));
         await setDoc(
           newDocRef,
           {
             id: newDocRef.id,
-            employee_id: profile?.employee_id,
+            employee_id: profile?.id,
             status: 'pending',
             type: leaveType,
             start_date: dateStart,
