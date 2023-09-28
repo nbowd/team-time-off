@@ -15,16 +15,6 @@ const typeColors: colorsType = {
   'Sick Leave': 'sick-leave'
 }
 
-const nameColors = [
-  '#9F0000',
-  '#830091',
-  '#166700',
-  '#00219A',
-  '#005B98',
-  '#AE0046',
-  '#00644E',
-]
-
 interface CalendarProps {
   user: firebase.User | null
 }
@@ -96,7 +86,7 @@ function Calendar({user}: CalendarProps) {
       let updatedTempArray = tempRequestArray.map((req) => {
         const employee = tempEmployeeArray.filter((emp) => req.employee_id === emp.id)[0];
         req.full_name = `${employee.first_name} ${employee.last_name}`;
-        req.color = nameColors[Math.floor(Math.random() * nameColors.length)]
+        req.color = employee.color
         req.employee_id = employee.id
         return req
       })

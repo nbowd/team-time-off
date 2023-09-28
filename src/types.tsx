@@ -8,7 +8,8 @@ export interface Employee {
   profile_picture: string,
   remaining_pto: number,
   used_pto: number,
-  national_holidays: string
+  national_holidays: string,
+  color: string
 }
 
 export interface Request {
