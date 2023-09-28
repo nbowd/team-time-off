@@ -4,6 +4,19 @@ import { Employee } from "@/types";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "@/firebaseSetup";
 
+export const settings = {
+  totalPTO: 25,
+  nameColors: [
+    '#9F0000',
+    '#830091',
+    '#166700',
+    '#00219A',
+    '#005B98',
+    '#AE0046',
+    '#00644E',
+  ]
+}
+
 export const getBusinessDays = (start: string, end: string) => {
   const startDate = new Date(start);
   const endDate = add(new Date(end), {days: 1})

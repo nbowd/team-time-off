@@ -6,6 +6,7 @@ import { Employee } from '@/types';
 import UserRow from '@/components/UserRow';
 import defaultProfile from '@/assets/default_profile.jpg';
 import { Doughnut } from 'react-chartjs-2';
+import { settings } from '@/utils/helpers';
 import 'chart.js/auto';
 
 function Users() {
@@ -89,7 +90,7 @@ function Users() {
               <h3>Time Off Details for {activeUser?.first_name} {activeUser?.last_name}</h3>
               <div className="user-detail-row">
                 <div className="user-detail">
-                  <span className="detail-bubble">25</span>
+                  <span className="detail-bubble">{settings.totalPTO}</span>
                   <span className="detail-label">Total PTO</span>
                 </div>
                 <div className="user-detail">

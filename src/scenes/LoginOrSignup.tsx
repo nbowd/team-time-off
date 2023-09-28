@@ -1,18 +1,8 @@
 import { useState, useRef } from "react"
 import { auth, db } from "@/firebaseSetup";
 import { collection, setDoc, doc } from "firebase/firestore"; 
+import { settings } from "@/utils/helpers";
 import '@/scenes/LoginOrSignup.css';
-
-const TOTAL_PTO = 25;
-const nameColors = [
-  '#9F0000',
-  '#830091',
-  '#166700',
-  '#00219A',
-  '#005B98',
-  '#AE0046',
-  '#00644E',
-]
 
 function LoginOrSignup() {
   const firstNameRef = useRef<HTMLInputElement>(null);
@@ -57,11 +47,11 @@ function LoginOrSignup() {
           last_name: lastNameRef.current!.value,
           email: newUser!.email,
           manager_privileges: true,
-          remaining_pto: TOTAL_PTO,
+          remaining_pto: settings.totalPTO,
           used_pto: 0,
           profile_picture: null,
           national_holidays: 'US',
-          color: nameColors[Math.floor(Math.random() * nameColors.length)]
+          color: settings.nameColors[Math.floor(Math.random() * settings.nameColors.length)]
         }
       )
 

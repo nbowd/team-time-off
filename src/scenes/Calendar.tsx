@@ -37,7 +37,6 @@ function Calendar({user}: CalendarProps) {
   let requestDays:any = [];
   
   if (requests) {
-    // console.log(requests)
     for (let i = 0; i < days.length; i++) {
       let requestDay:any = [];
       requests.map((req) => {
@@ -56,7 +55,6 @@ function Calendar({user}: CalendarProps) {
       })
       requestDays.push(requestDay) 
     }
-    // console.log(requestDays)
   }
   const getDateColumn = (day: Date, dayIdx: number) => {
     if (dayIdx === 0) {
