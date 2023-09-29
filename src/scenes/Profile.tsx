@@ -93,8 +93,6 @@ function Profile({user}: ProfileProps) {
     getProfile();
   }, [])
 
-  console.log(settings.nameColors)
-
   return (
     <div className="profile">
       <div className="profile-info">
@@ -111,7 +109,6 @@ function Profile({user}: ProfileProps) {
       <div className="profile-color">
 
         <span id='color-preview' style={{backgroundColor: profileColor}}></span>
-      {/* <Box sx={{ minWidth: 120 }}> */}
         <StyledFormControl variant="standard">
         <InputLabel id="demo-simple-select-label">Color</InputLabel>
           <Select
@@ -122,12 +119,11 @@ function Profile({user}: ProfileProps) {
             onChange={handleColorChange}
           >
             {settings.nameColors.map((color)=> {
-              return <MenuItem value={color}><span className='color-square' style={{backgroundColor: color}}></span> <b>{color}</b></MenuItem>
+              return <MenuItem value={color} key={'color'+color}><span className='color-square' style={{backgroundColor: color}} ></span> <b>{color}</b></MenuItem>
             })}
 
           </Select>
           </StyledFormControl>
-        {/* </Box> */}
       </div>
       <div className="navigation">
         <button className="new-request" onClick={() => modalRef.current?.showModal()}>
