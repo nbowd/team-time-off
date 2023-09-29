@@ -20,3 +20,14 @@
   text-decoration: underline;
   cursor: pointer;
 }
+
+.login-signup-error {
+  width: 80%;
+  background-color: red;
+  color: white;
+  padding: 1rem;
+  font-weight: bold;
+  border-radius: 16px;
+  display: flex;
+  justify-content: center;
+}

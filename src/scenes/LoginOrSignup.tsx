@@ -1,40 +1,44 @@
 import { useState, useRef } from "react"
 import { auth, db } from "@/firebaseSetup";
 import { collection, setDoc, doc } from "firebase/firestore"; 
-import { settings } from "@/utils/helpers";
+import { handleError, settings } from "@/utils/helpers";
 import '@/scenes/LoginOrSignup.css';
 
 function LoginOrSignup() {
-  const firstNameRef = useRef<HTMLInputElement>(null);
-  const lastNameRef = useRef<HTMLInputElement>(null);
-  const emailRef = useRef<HTMLInputElement>(null);
-  const passwordRef = useRef<HTMLInputElement>(null);
-  const repeatPasswordRef = useRef<HTMLInputElement>(null);
-  const [registeredUser, setRegisteredUser] = useState(true);
+  const [firstName, setFirstName] = useState<string>('');
+  const [lastName, setLastName] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [repeatPassword, setRepeatPassword] = useState<string>('');
+  const [registeredUser, setRegisteredUser] = useState<boolean>(true);
+  const errorRef = useRef<HTMLInputElement>(null);
+  const [errorMsg, setErrorMsg] = useState<string>('');
 
   const signIn = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       await auth.signInWithEmailAndPassword(
-        emailRef.current!.value,
-        passwordRef.current!.value
+        email,
+        password
       )
     } catch (error) {
-      console.log(error)
+      if (error instanceof Error) {
+        handleError(error.message, setErrorMsg, errorRef)
+      }
     }
   }
 
   const createAccount = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (passwordRef.current!.value !== repeatPasswordRef.current!.value) {
-      console.log('ERROR: Password mismatch')
+    if (password !== repeatPassword) {
+      handleError('Password mismatch', setErrorMsg, errorRef)
       return
     }
 
     try {
       const response = await auth.createUserWithEmailAndPassword(
-        emailRef.current!.value,
-        passwordRef.current!.value
+        email,
+        password
       )
       const newUser = response.user;
         
@@ -43,8 +47,8 @@ function LoginOrSignup() {
         newDocRef, {
           id: newDocRef.id,
           employee_id: newUser!.uid,
-          first_name: firstNameRef.current!.value,
-          last_name: lastNameRef.current!.value,
+          first_name: firstName,
+          last_name: lastName,
           email: newUser!.email,
           manager_privileges: true,
           remaining_pto: settings.totalPTO,
@@ -56,38 +60,56 @@ function LoginOrSignup() {
       )
 
     } catch (error) {
-      console.log(error)
+      if (error instanceof Error) {
+        handleError(error.message, setErrorMsg, errorRef)
+      }
     }
+  }
+
+  const clearAllFields = () => {
+    setFirstName('');
+    setLastName('');
+    setEmail('');
+    setPassword('');
+    setRepeatPassword('');
+  }
+
+  const handleSwitch = () => {
+    clearAllFields();
+    setRegisteredUser(!registeredUser);
   }
 
   return (
     <>
       {
         registeredUser ?
-            <div className="login">
+            <div className="login" onSelect={()=>setErrorMsg('')} >
               <h1 className="login-title">Login</h1>
               <form onSubmit={signIn}>
-                <input type="text" placeholder="Email" name="email" ref={emailRef} required/>
-                <input type="password" placeholder="Password" name="psw" ref={passwordRef} required/>
+                <input type="text" placeholder="Email" name="email" value={email} onChange={e => setEmail(e.target.value)} required/>
+                <input type="password" placeholder="Password" name="psw" value={password} onChange={e => setPassword(e.target.value)} required/>
         
-                <button type="submit">Login</button>
+                <button type="submit" onSelect={(e:React.MouseEvent<HTMLButtonElement>) => {e.stopPropagation()}}>Login</button>
               </form>
             </div>
             : 
-            <div className="signup">
+            <div className="signup" onSelect={()=>setErrorMsg('')}>
               <h1 className="signup-title">Create an Account</h1>
               <form onSubmit={createAccount}>
-                  <input type="text" placeholder="First Name" name="firstName" ref={firstNameRef} required/>
-                  <input type="text" placeholder="Last Name" name="lastName" ref={lastNameRef} required/>
-                  <input type="text" placeholder="Email" name="email" ref={emailRef} required/>
-                  <input type="password" placeholder="Password" name="psw" ref={passwordRef} required/>
-                  <input type="password" placeholder="Repeat Password" name="psw-repeat" ref={repeatPasswordRef} required/>
+                  <input type="text" placeholder="First Name" name="firstName" value={firstName} onChange={e => setFirstName(e.target.value)} required/>
+                  <input type="text" placeholder="Last Name" name="lastName" value={lastName} onChange={e => setLastName(e.target.value)} required/>
+                  <input type="text" placeholder="Email" name="email" value={email} onChange={e => setEmail(e.target.value)} required/>
+                  <input type="password" placeholder="Password" name="psw" value={password} onChange={e => setPassword(e.target.value)} required/>
+                  <input type="password" placeholder="Repeat Password" name="psw-repeat" value={repeatPassword} onChange={e => setRepeatPassword(e.target.value)} required/>
 
-                  <button type="submit">Create Account</button>
+                  <button type="submit" onSelect={(e:React.MouseEvent<HTMLButtonElement>) => {e.stopPropagation()}}>Create Account</button>
               </form>
             </div>
       }
-      <button className="login-signup-switch" onClick={() => setRegisteredUser(!registeredUser)}>{registeredUser? "Create an Account": "Have Account? Login"}</button>
+      <button className="login-signup-switch" onClick={handleSwitch}>{registeredUser? "Create an Account": "Have Account? Login"}</button>
+      <div className="login-signup-error" style={errorMsg.length === 0? {display: 'none'}:{display: 'flex', justifyContent: 'center'}} ref={errorRef}>
+        {errorMsg}
+      </div>
     </>
   )
 }

@@ -40,3 +40,22 @@ export const getProfile = async (user: firebase.User) => {
   });
   return currentUser
 }
+
+const errorShake = (errorRef: React.RefObject<HTMLInputElement>) => {
+  const interval = setInterval(move, 50)
+  let px = 8;
+  function move() {
+    errorRef.current!.style.marginLeft = px + 'px';
+    px = px < 0 ? ((px * -1) - 1) : ((px * -1) + 1);
+    if (px === 1) clearInterval(interval);
+  }
+}
+
+export const handleError = (error:string, setErrorMsg: Function, errorRef: React.RefObject<HTMLInputElement>) => {
+  let newError = error;
+  if (error.slice(0,10) === 'Firebase: ') {
+    newError = error.slice(10)
+  }
+  setErrorMsg(newError)
+  errorShake(errorRef);
+}
