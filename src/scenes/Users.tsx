@@ -8,6 +8,7 @@ import defaultProfile from '@/assets/default_profile.jpg';
 import { Doughnut } from 'react-chartjs-2';
 import { settings } from '@/utils/helpers';
 import 'chart.js/auto';
+import { GridLoader } from 'react-spinners';
 
 function Users() {
   const [loaded, setLoaded] = useState(false);
@@ -112,7 +113,9 @@ function Users() {
           </div>
         </div>
         :
-        <h1></h1>
+        <div className="loading">
+          <GridLoader/>
+        </div>
       }
     </div>
   )

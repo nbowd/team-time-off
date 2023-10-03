@@ -5,6 +5,8 @@ import { collection, query, getDocs, orderBy} from "firebase/firestore";
 import { db } from "@/firebaseSetup";
 import { Employee, Request } from '@/types';
 import firebase from "firebase/compat/app"; // used for interface types;
+import { GridLoader } from 'react-spinners';
+
 
 interface colorsType {
   [key: string]: string;
@@ -146,7 +148,10 @@ function Calendar({user}: CalendarProps) {
             </div>
           ))}
         </div>:
-        <h1></h1>}
+        <div className="loading">
+          <GridLoader/>
+        </div>
+        }
       </div>
     </div>
   )

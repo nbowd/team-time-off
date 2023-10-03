@@ -36,11 +36,3 @@ function App() {
 }
 
 export default App;
-
-
-/*
-TO DO:
-  - Refactor and extract reused functions/components
-  - Loading icon
-  - Add database rules to delete all requests associated with a User when they delete their account?
-*/ 
