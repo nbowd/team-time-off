@@ -2,7 +2,7 @@ import '@/scenes/MyRequests.css'
 import React,{ useState, useEffect, useRef } from 'react'
 import { db } from "@/firebaseSetup";
 import { collection, query, where, getDocs, doc, deleteDoc, orderBy  } from "firebase/firestore";
-import { Request } from '@/types';
+import { Employee, Request } from '@/types';
 import firebase from "firebase/compat/app"; // for User props typing
 import editIcon from '@/assets/icons/icons8-pencil-30.png';
 import trashIcon from '@/assets/icons/icons8-trash-50.png';
@@ -15,6 +15,7 @@ interface MyRequestsProps {
 }
 
 function MyRequests({user}: MyRequestsProps) {
+  const [profile, setProfile] = useState<Employee | null>(null);
   const [checkedRequests, setCheckedRequests] = useState(false);
   const [requests, setRequests] = useState<Request[] | []>([]);
   const [rows, setRows] = useState<React.ReactNode[] | []>([]);
@@ -86,6 +87,7 @@ function MyRequests({user}: MyRequestsProps) {
       // doc.data() is never undefined for query doc snapshots
         tempArray.push(doc.data() as Request)
     });
+    setProfile(currentUser);
     setRequests(tempArray);
     buildRows(tempArray);
     setCheckedRequests(true);
@@ -101,7 +103,7 @@ function MyRequests({user}: MyRequestsProps) {
 
   return (
     <div className="my-requests">
-      <Modal modalRef={requestModalRef} request={request} type={'edit'}/>
+      <Modal modalRef={requestModalRef} request={request} profile={profile} type={'edit'}/>
       <div className="my-requests-heading">
         <h1>My Requests</h1>
       </div>

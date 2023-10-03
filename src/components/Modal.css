@@ -1,7 +1,6 @@
 
 .modal {
   width: 20%;
-  height: 50%;
 }
 
 .dialog-div {
@@ -35,9 +34,9 @@
   border:none;
   border-radius: 5px;
   height: 2.5rem;
-  width: 90%;
-  position: absolute;
-  bottom: 1rem;
+  width: 100%;
+  margin-top: 1rem;
+  font-weight: bold;
 }
 
 .modal-submit:hover {
