@@ -8,7 +8,7 @@ import editIcon from '@/assets/icons/icons8-pencil-30.png';
 import trashIcon from '@/assets/icons/icons8-trash-50.png';
 import Modal from '@/components/Modal';
 import { getBusinessDays, getProfile } from '@/utils/helpers';
-
+import { isBefore } from 'date-fns';
 
 interface MyRequestsProps {
   user?: firebase.User | null;
@@ -66,8 +66,10 @@ function MyRequests({user}: MyRequestsProps) {
           <div className="row-controls">
             <span className="my-requests-row-item">{getBusinessDays(req.start_date, req.end_date)}</span>
             <span className='row-control'>
-              <img src={editIcon} alt="pencil icon" className="row-icon" onClick={() => openEditModal(req)} />
-              <img src={trashIcon} alt="delete icon" className="row-icon" onClick={() => deleteRequest(req.id)} />
+              {isBefore(new Date(req.end_date), new Date())? <></>:<>
+                <img src={editIcon} alt="pencil icon" className="row-icon" onClick={() => openEditModal(req)} />
+                <img src={trashIcon} alt="delete icon" className="row-icon" onClick={() => deleteRequest(req.id)} />
+              </>}
             </span>
           </div>
         </div>

@@ -41,10 +41,6 @@ export default App;
 /*
 TO DO:
   - Refactor and extract reused functions/components
-  - Request filtering to not grab every request, but only the ones within the current viewable timeframe
-  - Security rules to not allow authorized users to create or update requests
-  - Adjust CSS for input consistency on create/edit requests forms
   - Loading icon
-  - Error Handling for request creation/edit
   - Add database rules to delete all requests associated with a User when they delete their account?
 */ 

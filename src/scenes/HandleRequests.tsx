@@ -8,6 +8,7 @@ import { getBusinessDays } from '@/utils/helpers';
 import firebase from "firebase/compat/app"; // for User props typing
 import Dropdown, { Option } from "react-dropdown";
 import SearchBar from '@/components/SearchBar';
+import { isBefore } from 'date-fns';
 
 interface MyRequestsProps {
   user?: firebase.User | null;
@@ -86,11 +87,13 @@ function HandleRequests({user}: MyRequestsProps) {
           <span className="handle-requests-row-item">{req.full_name}</span>
           <ul className={`status-item ${req.status}`}>
             <li className="handle-requests-row-item">
-              <Dropdown 
-                options={['Approved', 'Pending', 'Rejected']}
-                placeholder={req.status.toUpperCase()[0] + req.status.slice(1)}
-                onChange={(option) => changeStatus(option, req)}
-              />
+              {isBefore(new Date(req.end_date), new Date())? <>{req.status.toUpperCase()[0] + req.status.slice(1)}</>: <>
+                <Dropdown 
+                  options={['Approved', 'Pending', 'Rejected']}
+                  placeholder={req.status.toUpperCase()[0] + req.status.slice(1)}
+                  onChange={(option) => changeStatus(option, req)}
+                />
+              </>}
             </li>
           </ul>
           <span className="handle-requests-row-item">{req.type}</span>

@@ -8,6 +8,7 @@ import { db } from "@/firebaseSetup";
 import { collection, doc, getDocs, query, setDoc, where } from "firebase/firestore";
 import { AuthContext } from "@/context/AuthContext";
 import { getBusinessDays, handleError } from "@/utils/helpers";
+import isBefore from "date-fns/isBefore";
 
 
 
@@ -59,6 +60,24 @@ function Modal({modalRef, profile, request, type}: ModalProps) {
     return missingFields
   }
 
+  const checkDates = (dateStart: string, dateEnd: string) => {
+    const start = new Date(dateStart)
+    const end = new Date(dateEnd)
+    const today = new Date();
+
+    if (isBefore(end, start)) {
+      handleError('Date Error: end date is before the start date', setErrorMsg, errorRef)
+      return false
+    }
+
+    if (isBefore(end, today) && start !== today) {
+      handleError('Date Error: start date is in the past', setErrorMsg, errorRef)
+      return false
+    }
+
+    return true
+  }
+
   const handleSubmit = () => {
     if (type === 'create') {
       handleCreate();
@@ -77,10 +96,17 @@ function Modal({modalRef, profile, request, type}: ModalProps) {
     }
 
     if (user?.uid !== profile?.employee_id) return
-    const numberOfDays = getBusinessDays(dateStart, dateEnd);
-    if (profile!.remaining_pto < numberOfDays) {
+
+    if (!checkDates(dateStart, dateEnd)) {
       return
     }
+
+    const numberOfDays = getBusinessDays(dateStart, dateEnd);
+    if (profile!.remaining_pto < numberOfDays) {
+      handleError('Date Error: Not enough PTO remaining for request', setErrorMsg, errorRef)
+      return
+    }
+
     try {
       const newDocRef = doc(collection(db, "Requests"));
       await setDoc(
@@ -106,6 +132,22 @@ function Modal({modalRef, profile, request, type}: ModalProps) {
   }
 
   const handleEdit = async () => {
+    const missingFields = checkMissingFields();
+    if (missingFields.length !== 0) {
+      handleError("Missing Fields: " + missingFields.join(', '), setErrorMsg, errorRef)
+      return 
+    }
+
+    if (!checkDates(dateStart, dateEnd)) {
+      return
+    }
+
+    const numberOfDays = getBusinessDays(dateStart, dateEnd);
+    if (profile!.remaining_pto < numberOfDays) {
+      handleError('Date Error: Not enough PTO remaining for request', setErrorMsg, errorRef)
+      return
+    }
+
     try {
       await setDoc(doc(db, "Requests", request!.id), {
         id: request!.id,
