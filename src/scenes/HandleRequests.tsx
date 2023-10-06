@@ -8,7 +8,7 @@ import { getBusinessDays } from '@/utils/helpers';
 import firebase from "firebase/compat/app"; // for User props typing
 import Dropdown, { Option } from "react-dropdown";
 import SearchBar from '@/components/SearchBar';
-import { isBefore } from 'date-fns';
+import { add, isBefore, isSameDay } from 'date-fns';
 
 interface MyRequestsProps {
   user?: firebase.User | null;
@@ -80,14 +80,17 @@ function HandleRequests({user}: MyRequestsProps) {
       return
     }
     let tempRows:React.ReactNode[] = [];
-
+    
     reqs.map((req: Request, mapIdx) => {
+      const start = add(new Date(req.start_date), {days:1})
+      const end = add(new Date(req.end_date), {days:1})
+      const today = new Date;
       tempRows.push(
         <div className="handle-requests-row" key={`row-${mapIdx}`}>
           <span className="handle-requests-row-item">{req.full_name}</span>
           <ul className={`status-item ${req.status}`}>
             <li className="handle-requests-row-item">
-              {isBefore(new Date(req.end_date), new Date())? <>{req.status.toUpperCase()[0] + req.status.slice(1)}</>: <>
+              {isBefore(end, today) && !isSameDay(start, today)? <>{req.status.toUpperCase()[0] + req.status.slice(1)}</>: <>
                 <Dropdown 
                   options={['Approved', 'Pending', 'Rejected']}
                   placeholder={req.status.toUpperCase()[0] + req.status.slice(1)}

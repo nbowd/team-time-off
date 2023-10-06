@@ -9,6 +9,7 @@ import { collection, doc, getDocs, query, setDoc, where } from "firebase/firesto
 import { AuthContext } from "@/context/AuthContext";
 import { getBusinessDays, handleError } from "@/utils/helpers";
 import isBefore from "date-fns/isBefore";
+import { add, isSameDay } from "date-fns";
 
 
 
@@ -61,16 +62,16 @@ function Modal({modalRef, profile, request, type}: ModalProps) {
   }
 
   const checkDates = (dateStart: string, dateEnd: string) => {
-    const start = new Date(dateStart)
-    const end = new Date(dateEnd)
+    const start = add(new Date(dateStart),{days: 1})
+    const end = add(new Date(dateEnd),{days: 1})
     const today = new Date();
 
     if (isBefore(end, start)) {
       handleError('Date Error: end date is before the start date', setErrorMsg, errorRef)
       return false
     }
-
-    if (isBefore(end, today) && start !== today) {
+    
+    if (isBefore(end, today) && !isSameDay(start, today)) {
       handleError('Date Error: start date is in the past', setErrorMsg, errorRef)
       return false
     }
