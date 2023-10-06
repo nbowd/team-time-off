@@ -1,6 +1,6 @@
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
-import { collection, doc, getDocs, getFirestore, setDoc } from "firebase/firestore";
+import { doc, getFirestore, setDoc } from "firebase/firestore";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { Employee } from "./types";
 
@@ -17,14 +17,6 @@ export async function upload(file:any, currentUser:any, setLoading: Function, pr
   await uploadBytes(fileRef, file);
   const photoURL = await getDownloadURL(fileRef);
 
-  let docID = null;
-
-  const querySnapshot = await getDocs(collection(db, "Employees"));
-  querySnapshot.forEach((doc) => {
-    if (doc.data() && doc.data().employee_id === currentUser!.uid) {
-      docID = doc.data().id
-    }
-  });
   try {
     await setDoc(doc(db, "Employees", profile!.id), {
       ...profile,
