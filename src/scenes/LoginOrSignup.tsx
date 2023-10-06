@@ -50,7 +50,7 @@ function LoginOrSignup() {
           first_name: firstName,
           last_name: lastName,
           email: newUser!.email,
-          manager_privileges: true,
+          manager_privileges: false,
           remaining_pto: settings.totalPTO,
           used_pto: 0,
           profile_picture: null,

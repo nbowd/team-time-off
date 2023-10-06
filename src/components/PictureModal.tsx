@@ -3,7 +3,7 @@ import { upload } from "@/firebaseSetup";
 import React, { ChangeEvent, useState } from 'react'
 import firebase from "firebase/compat/app"; // used for interface types;
 import { Employee } from "@/types";
-
+import { FileUploader } from "react-drag-drop-files";
 
 interface PictureModalProps {
   pictureModalRef: React.RefObject<HTMLDialogElement>,
@@ -11,6 +11,8 @@ interface PictureModalProps {
   profile?: Employee | null,
   setProfilePicture: Function
 }
+
+const fileTypes = ["JPG", "PNG"]
 
 function PictureModal({ pictureModalRef, user, profile, setProfilePicture }: PictureModalProps) {
   const [photo, setPhoto] = useState<object | null>(null)
@@ -28,8 +30,7 @@ function PictureModal({ pictureModalRef, user, profile, setProfilePicture }: Pic
   }
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files) return;
-    setPhoto(e.target.files[0])
+    setPhoto(e)
   }
 
   const handleSubmit = () => {
@@ -41,7 +42,11 @@ function PictureModal({ pictureModalRef, user, profile, setProfilePicture }: Pic
     <dialog ref={pictureModalRef} className="picture-modal" onClick={(e) => onDialogClick(e)}>
       <div className="picture-modal-div">
         <h2>Upload New Profile Picture:</h2>
-        <input type="file" onChange={e => handleChange(e)} />
+        
+        <div className="picture-modal-input">
+          <FileUploader handleChange={handleChange} name="file" className='drag-drop' types={fileTypes} />
+        </div>
+
         <button disabled={loading || !photo} className="picture-modal-upload" onClick={handleSubmit}>Upload</button>
         <button onClick={() => pictureModalRef.current?.close()} className='close-modal'>&times;</button>
       </div>

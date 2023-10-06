@@ -25,7 +25,6 @@ export async function upload(file:any, currentUser:any, setLoading: Function, pr
       docID = doc.data().id
     }
   });
-  // console.log(docID)
   try {
     await setDoc(doc(db, "Employees", profile!.id), {
       ...profile,
