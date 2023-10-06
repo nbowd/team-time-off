@@ -5,6 +5,19 @@ Created by Nick Bowden
 The purpose of this project was to sharpen my full-stack skills through a simulated real-world project. I wanted to explore using some new tools, such as the suite of tools from Firebase, and to build an application that could solve an internal business problem. 
 
 The scenario for this application is that there is a small team that needs a better way to manage time off requests as the team currently handles it manually. They need a way to make and manage requests, which will be approved by managers, and will display approved request days so that everyone can plan.
+
+## Demo 
+In order to see the full calendar and interact with the application, you will need to log in.
+
+Use these credentials to log in to the guest account. 
+
+**Email**: janice.lorenzo[]()@mail.com  \
+**Password**: hunter2
+
+This account has manager privileges so that all features can be seen.
+
+Try it live: https://team-time-off.vercel.app/
+
 ## Installation
 Clone the repo 
 
