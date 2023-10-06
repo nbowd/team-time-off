@@ -1,5 +1,4 @@
 .users {
-  height: 100vh;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -21,7 +20,7 @@
 
 .users-body {
   flex: 1;
-  overflow: auto;
+  /* overflow: auto; */
   display: flex;
   margin: .75rem;
 }
@@ -83,6 +82,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  
 }
 
 .user-detail-row {
