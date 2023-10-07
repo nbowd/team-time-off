@@ -152,3 +152,8 @@
   grid-column-start: 7;
 }
 
+@media screen and (max-height:800px) {
+  .days-requests {
+    font-size: .75rem;
+  }
+}
