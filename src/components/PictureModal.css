@@ -30,3 +30,9 @@
 .picture-modal-upload:disabled {
   background-color: gray;
 }
+
+@media screen and (max-height:900px) {
+  .picture-modal {
+    height:35%;
+  }
+}
