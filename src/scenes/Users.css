@@ -120,3 +120,36 @@
 .detail-label {
   font-weight: bold;
 }
+
+@media screen and (max-height:800px) {
+  .user-graphs {
+    height: 14rem;
+  }
+
+  .users-body-right img {
+    height: 8rem;
+    width: 8rem;
+  }
+
+  .users-body-right-profile span:first-of-type {
+    font-size: 1.5rem;
+  }
+  
+  .users-body-right-profile span:last-of-type {
+    font-size: .75rem;
+  }
+
+  .user-details h3 {
+    font-size: 1rem;
+  }
+
+  .detail-bubble {
+    width: 2rem;
+    height: 2rem;
+    font-size: .9rem;
+  }
+  .detail-label {
+    font-size: .75rem;
+  }
+  
+}
