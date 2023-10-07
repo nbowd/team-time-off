@@ -75,7 +75,7 @@
 }
 
 .new-request .profile-icon {
-  width: 20px;
+  width: 1 rem;
   padding-bottom: .2rem;
 }
 
@@ -152,4 +152,40 @@
   justify-content: center;
   align-items: center;
   align-self: center;
+}
+
+
+@media screen and (max-height:800px) {
+    .profile-picture {
+      width: 6rem;
+      height: 6rem;
+    }
+
+    .profile-info h3, .profile-info h2 {
+      font-size: 1rem;
+    }
+
+    .calendar-nav, .my-requests-nav, .handle-requests-nav, .users-nav {
+      width: 60%;
+      height: 1.5rem;
+      font-size: .75rem;
+    }
+
+    .new-request {
+      width: 70%;
+      height: 1.5rem;
+      font-size: .75rem;
+    }
+
+    #color-preview {
+      width: 2rem;
+      height: 2rem;
+    }
+
+    .logout-btn {
+      width:7rem;
+      height: 2rem;
+      font-size: .75rem;
+
+    }
 }
